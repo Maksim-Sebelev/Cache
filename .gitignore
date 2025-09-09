@@ -1,0 +1,8 @@
+# my vscode settings
+.vscode/
+
+# my bash scripts
+bash/
+
+# directory with binary, objectr ... filer and files generated with cmake
+build/

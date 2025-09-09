@@ -1,0 +1,128 @@
+.
+├── bash
+│   ├── assets
+│   │   └── struct.bash
+│   ├── cmake
+│   │   └── cmake.bash
+│   ├── git
+│   │   ├── commit.bash
+│   │   └── copy.bash
+│   ├── global_bash
+│   │   ├── bash_cd.bash
+│   │   ├── .bash_functions_copy
+│   │   └── create_bash_functions.bash
+│   ├── iwyu
+│   │   └── iwyu.bash
+│   ├── json
+│   │   └── format_json.bash
+│   └── sys
+│       ├── touch_all.bash
+│       └── ulb.bash
+├── build
+│   ├── cache
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   │   ├── 3.28.3
+│   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   ├── CMakeSystem.cmake
+│   │   │   └── CompilerIdCXX
+│   │   │       ├── a.out
+│   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │       └── tmp
+│   │   ├── cache.dir
+│   │   │   ├── build.make
+│   │   │   ├── cmake_clean.cmake
+│   │   │   ├── compiler_depend.internal
+│   │   │   ├── compiler_depend.make
+│   │   │   ├── compiler_depend.ts
+│   │   │   ├── DependInfo.cmake
+│   │   │   ├── depend.make
+│   │   │   ├── flags.make
+│   │   │   ├── link.txt
+│   │   │   ├── progress.make
+│   │   │   └── src
+│   │   │       ├── arc_cache.cpp.o
+│   │   │       ├── arc_cache.cpp.o.d
+│   │   │       ├── cache_test.cpp.o
+│   │   │       └── cache_test.cpp.o.d
+│   │   ├── cmake.check_cache
+│   │   ├── CMakeConfigureLog.yaml
+│   │   ├── CMakeDirectoryInformation.cmake
+│   │   ├── CMakeRuleHashes.txt
+│   │   ├── Makefile2
+│   │   ├── Makefile.cmake
+│   │   ├── pkgRedirects
+│   │   ├── progress.marks
+│   │   ├── rebuild.dir
+│   │   │   ├── build.make
+│   │   │   ├── cmake_clean.cmake
+│   │   │   ├── compiler_depend.make
+│   │   │   ├── compiler_depend.ts
+│   │   │   ├── DependInfo.cmake
+│   │   │   └── progress.make
+│   │   ├── run.dir
+│   │   │   ├── build.make
+│   │   │   ├── cmake_clean.cmake
+│   │   │   ├── compiler_depend.make
+│   │   │   ├── compiler_depend.ts
+│   │   │   ├── DependInfo.cmake
+│   │   │   └── progress.make
+│   │   └── TargetDirectories.txt
+│   ├── cmake_install.cmake
+│   ├── Makefile
+│   └── Testing
+│       └── Temporary
+│           └── LastTest.log
+├── .git
+│   ├── branches
+│   ├── config
+│   ├── description
+│   ├── HEAD
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   └── update.sample
+│   ├── info
+│   │   └── exclude
+│   ├── objects
+│   │   ├── info
+│   │   └── pack
+│   └── refs
+│       ├── heads
+│       └── tags
+├── .gitignore
+├── project_struct
+│   ├── all_project_struct.txt
+│   ├── project_struct.txt
+│   └── without_gitignore_project_struct.txt
+├── Src
+│   ├── CMakeLists.txt
+│   ├── include
+│   │   └── arc_cache.hpp
+│   ├── README.md
+│   └── src
+│       ├── arc_cache.cpp
+│       └── cache_test.cpp
+├── tests
+│   ├── 1.dat
+│   ├── 2.dat
+│   ├── 3.dat
+│   ├── 4.dat
+│   └── testrun.sh
+└── .vscode
+    ├── c_cpp_properties.json
+    └── settings.json
+
+37 directories, 89 files
