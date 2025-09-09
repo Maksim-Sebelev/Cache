@@ -6,3 +6,7 @@ bash/
 
 # directory with binary, objectr ... filer and files generated with cmake
 build/
+
+# files with my personally information about project struct
+project_struct/all_project_struct.txt
+project_struct/without_gitignore_project_struct.txt
