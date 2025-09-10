@@ -16,10 +16,8 @@ struct cache_t
         size_t              cache_size_; 
         std::list<key_type> cache_list_; 
 
-
-        using list_iterator = typename std::list<key_type>::iterator;
-        std::unordered_map<item_t, list_iterator> hash_table_;
-
+        using list_iterator_t = typename std::list<key_type>::iterator;
+        std::unordered_map<item_t, list_iterator_t> hash_table_;
         
     public:
 
