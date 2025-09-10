@@ -40,20 +40,23 @@ add_custom_target(${REBUILD_TARGET}
 
 # create tests
 
+enable_testing()
+include(CTest)
+
 SET(TEST_DIR ${CMAKE_SOURCE_DIR}/../tests)
 
-file(GLOB tests_files "${TEST_DIR}/*.dat") # save all tests-files in variable 'testfiles'?"
-if(NOT EXISTS ${TEST_DIR})
+file(GLOB tests_files "${TEST_DIR}/*.dat") # save all tests-files in variable 'testfiles'
+
+if(NOT EXISTS ${TEST_DIR}) # check that exists test-directory
     message(WARNING "Test directory not found: ${TEST_DIR}")
     return()
 endif()
 
-# Проверяем что файлы найдены
-list(LENGTH tests_files num_tests)
+list(LENGTH tests_files num_tests) # get quantity of tests
 
-if(num_tests EQUAL 0)
-    message(WARNING "No .dat files found in ${TEST_DIR}")
-    return()
+if(${num_tests} EQUAL 0) # check that at least 1 test was found
+	message(WARNING "No .dat files found in ${TEST_DIR}")
+	return()
 endif()
 
 if(NOT EXISTS ${TEST_DIR}/testrun.sh)
@@ -62,17 +65,14 @@ if(NOT EXISTS ${TEST_DIR}/testrun.sh)
 endif()
 
 foreach(file ${tests_files})
-
-	message("fuck")
-	message("${file}")
-
 	get_filename_component(test_name ${file} NAME_WE)
-	message("${test_name}")
 
-  	add_test(
-    	NAME test_${test_name}
-    	COMMAND ${TEST_DIR}/testrun.sh ${file}
-    	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	add_test(
+		NAME test_${test_name}
+		COMMAND bash -c ${TEST_DIR}/testrun2.sh ${file}
+		# WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 	)
+
 	set_tests_properties(test_${test_name} PROPERTIES DEPENDS ${EXE})
+
 endforeach()
