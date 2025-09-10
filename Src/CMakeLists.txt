@@ -1,26 +1,24 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(some_c++_project
+project(Cache
 	LANGUAGES CXX)
 
-set(CACHE_SRC_DIR "src/cache")
+set(CACHE_SRC_DIR src/cache)
+
 set(CACHE_INC_DIR "include/cache")
 
-set(CACHE_INC_DIR "src/test")
-set(TEST_INC_DIR "include/test")
+set(CACHE_EXE cache)
 
-set(EXE cache_test)
-
-set(SRC
-	${SRC_DIR}/cache_test.cpp
-	${SRC_DIR}/arc_cache.cpp
+set(CACHE_SRC
+	${CACHE_SRC_DIR}/arc_cache.cpp
+	${CACHE_SRC_DIR}/main.cpp
 )
 
-add_executable(${EXE} ${SRC})
+add_executable(${CACHE_EXE} ${CACHE_SRC})
 
-target_include_directories(${EXE}
+target_include_directories(${CACHE_EXE}
 	PRIVATE
-		${PROJECT_SOURCE_DIR}/${INC_DIR}
+		${PROJECT_SOURCE_DIR}/${CACHE_INC_DIR}
 )
 
 
@@ -45,6 +43,14 @@ add_custom_target(${REBUILD_TARGET}
 )
 
 # =============================================================================================================
+
+# create test cache executable
+
+set(CACHE_TEST_EXE cache_test)
+add_custom_target(${CACHE_TEST_EXE}
+
+)
+
 # create tests
 
 enable_testing()
