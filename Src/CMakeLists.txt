@@ -3,9 +3,13 @@ cmake_minimum_required(VERSION 3.5)
 project(some_c++_project
 	LANGUAGES CXX)
 
-set(SRC_DIR src)
-set(INC_DIR include)
-set(EXE cache)
+set(CACHE_SRC_DIR "src/cache")
+set(CACHE_INC_DIR "include/cache")
+
+set(CACHE_INC_DIR "src/test")
+set(TEST_INC_DIR "include/test")
+
+set(EXE cache_test)
 
 set(SRC
 	${SRC_DIR}/cache_test.cpp
@@ -19,6 +23,8 @@ target_include_directories(${EXE}
 		${PROJECT_SOURCE_DIR}/${INC_DIR}
 )
 
+
+# =============================================================================================================
 # add targets 'run' and 'rebuild' to Makefile
 
 set(EXE_TARGET     ${EXE})
@@ -38,6 +44,7 @@ add_custom_target(${REBUILD_TARGET}
 	COMMENT "Rebuilding project"
 )
 
+# =============================================================================================================
 # create tests
 
 enable_testing()

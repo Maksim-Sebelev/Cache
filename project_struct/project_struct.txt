@@ -9,25 +9,24 @@
 │   │   ├── cache
 │   │   │   ├── arc_cache.hpp
 │   │   │   └── optimal_cache.hpp
-│   │   ├── global
-│   │   │   └── global.hpp
 │   │   └── test
 │   │       ├── cache_test.hpp
 │   │       ├── check_args.hpp
 │   │       ├── read_answer.hpp
+│   │       ├── read_test_and_answer.hpp
 │   │       ├── read_test.hpp
-│   │       ├── test_global.hpp
-│   │       └── test_struct.hpp
+│   │       └── test_files.hpp
 │   └── src
 │       ├── cache
 │       │   ├── arc_cache.cpp
 │       │   └── optimal_cache.cpp
-│       ├── global
 │       └── test
 │           ├── cache_test.cpp
 │           ├── check_args.cpp
 │           ├── read_answer.cpp
-│           └── read_test.cpp
+│           ├── read_test_and_answer.cpp
+│           ├── read_test.cpp
+│           └── test_files.cpp
 ├── tests
 │   ├── 1.dat
 │   ├── 2.dat
@@ -37,4 +36,4 @@
 │   └── testrun.sh
 └── tmp.txt
 
-12 directories, 26 files
+10 directories, 27 files
