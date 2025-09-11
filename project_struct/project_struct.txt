@@ -29,12 +29,11 @@
 │           ├── read_test.cpp
 │           └── test_files.cpp
 ├── tests
+│   ├── 1.ans
 │   ├── 1.dat
 │   ├── 2.dat
 │   ├── 3.dat
-│   ├── 4.dat
-│   ├── testrun2.sh
-│   └── testrun.sh
+│   └── 4.dat
 └── tmp.txt
 
-10 directories, 28 files
+10 directories, 27 files

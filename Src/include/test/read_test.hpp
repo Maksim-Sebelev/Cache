@@ -14,7 +14,8 @@ struct test_input_t
     size_t   input_size_;
     input_t* input_     ;
 
-    test_input_t(const char* test_file);
+     test_input_t(const char* test_file);
+    ~test_input_t();
 };
 
 //---------------------------------------------------------------------------------------------------------------

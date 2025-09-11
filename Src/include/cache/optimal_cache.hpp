@@ -1,5 +1,5 @@
-#ifndef BELADY_CACHE_HPP
-#define BELADY_CACHE_HPP
+#ifndef CACHE_OPTIMAL_CACHE_HPP
+#define CACHE_OPTIMAL_CACHE_HPP
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -11,4 +11,4 @@ size_t get_optimal_hits_quantity();
 
 //---------------------------------------------------------------------------------------------------------------
 
-#endif // BELADY_CACHE_HPP
+#endif // CACHE_OPTIMAL_CACHE_HPP

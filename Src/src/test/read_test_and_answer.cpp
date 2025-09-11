@@ -1,5 +1,5 @@
 #include <cassert>
-#include "test/read_test_data.hpp"
+#include "test/read_test_and_answer.hpp"
 #include "test/test_files.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
