@@ -20,6 +20,38 @@ test_data_t<input_t>::~test_data_t()
 
 //---------------------------------------------------------------------------------------------------------------
 
+template <typename input_t>
+size_t test_data_t<input_t>::get_test_answer()
+{
+    return test_answer_.get_test_answer();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+size_t test_data_t<input_t>::get_cache_size()
+{
+    return test_input_.get_cache_size();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+size_t test_data_t<input_t>::get_input_size()
+{
+    return test_input_.get_input_size();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+input_t test_data_t<input_t>::get_i_element_of_data(size_t i)
+{
+    return test_input_.get_i_element_of_data(i);
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
 /*
     ЭТО ДИЧАЙШИЙ КРИНЖ
     НО Я ЭТО СДЕЛАЛ ДО ТОГО

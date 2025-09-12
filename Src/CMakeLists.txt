@@ -118,11 +118,15 @@ endif()
 foreach(test_file ${test_files})
 
 	# get name of answer file
-	get_filename_component(name "${test_file}" NAME_WE)  # NAME_WE = без расширения
-	set(answer_file "${name}.ans")
+	get_filename_component(test_file_name      "${test_file}" NAME_WE)   # NAME_WE = без расширения
+	get_filename_component(test_file_directory "${test_file}" DIRECTORY) # DIRECTTORY = только путь, без файла
+	set(answer_file "${test_file_directory}/${test_file_name}.ans")
 
 	# create test_name
 	get_filename_component(test_name "test_${test_file}" NAME_WE)
+
+	message(${test_file})
+	message(${answer_file})
 
 	# add test
 	add_test(
@@ -135,7 +139,7 @@ foreach(test_file ${test_files})
 	)
 
 	# test will not execute, if didn`t exists executable file
-	# set_tests_properties(${test_name} PROPERTIES DEPENDS ${CACHE_TEST_EXE})
+	set_tests_properties(${test_name} PROPERTIES DEPENDS ${CACHE_TEST_EXE})
 	
 
 endforeach()

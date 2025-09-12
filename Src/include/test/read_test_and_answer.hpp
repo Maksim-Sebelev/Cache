@@ -25,6 +25,11 @@ struct test_data_t
 
         // dtor
        ~test_data_t();
+
+       size_t  get_test_answer      ();
+       size_t  get_cache_size       ();
+       size_t  get_input_size       ();
+       input_t get_i_element_of_data(size_t i);
 };
 
 //---------------------------------------------------------------------------------------------------------------
