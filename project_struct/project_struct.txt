@@ -1,5 +1,4 @@
 .
-├── belady.py
 ├── project_struct
 │   └── project_struct.txt
 ├── README.md
@@ -34,4 +33,4 @@
     ├── 2.ans
     └── 2.dat
 
-10 directories, 25 files
+10 directories, 24 files
