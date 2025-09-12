@@ -4,19 +4,27 @@
 //---------------------------------------------------------------------------------------------------------------
 
 #include <cstdlib>
-#include "test/read_test.hpp"
-#include "test/read_answer.hpp"
-#include "test/test_files.hpp"
+#include "read_test.hpp"
+#include "read_answer.hpp"
+#include "test_files.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename input_t>
 struct test_data_t
 {
-    test_input_t  test_input_ ;
-    test_answer_t test_answer_;
+    private:
+        // private struct variables
+        test_input_t<input_t> test_input_ ;
+        test_answer_t         test_answer_;
 
-    test_data_t(const test_files_t& test_files);
+    public:
+        // public struct methods
+        // ctor
+        test_data_t(const test_files_t& test_files);
+
+        // dtor
+       ~test_data_t();
 };
 
 //---------------------------------------------------------------------------------------------------------------

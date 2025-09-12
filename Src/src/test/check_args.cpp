@@ -51,7 +51,9 @@ static void bad_args_quant(const char* exe_file)
 
     std::cerr << "Needed 2 argmunets - test and answer file name"
               << std::endl
-              << "Usage: ./" << exe_file << " <test_file>.dat <answer_file>.ans"
+              << "Usage: "
+              << std::endl
+              << exe_file << " <test_file>.dat <answer_file>.ans"
               << std::endl;
 
     exit(EXIT_FAILURE);
@@ -79,7 +81,7 @@ static void bad_answer_extension(const char* answer_file)
 {
     assert(answer_file);
 
-    std::cerr << "\'" << answer_file << "\'" << "is not a answer file."
+    std::cerr << "\'" << answer_file << "\' is not a answer file."
               << std::endl
               << "Correct is *.ans"
               << std::endl;

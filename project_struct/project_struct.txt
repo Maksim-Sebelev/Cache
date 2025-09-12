@@ -28,12 +28,10 @@
 │           ├── read_test_and_answer.cpp
 │           ├── read_test.cpp
 │           └── test_files.cpp
-├── tests
-│   ├── 1.ans
-│   ├── 1.dat
-│   ├── 2.dat
-│   ├── 3.dat
-│   └── 4.dat
-└── tmp.txt
+└── tests
+    ├── 1.ans
+    ├── 1.dat
+    ├── 2.ans
+    └── 2.dat
 
-10 directories, 27 files
+10 directories, 25 files

@@ -2,52 +2,69 @@
 #include <cstdlib>
 #include <fstream>
 #include <cassert>
+#include <cstddef>
 
-#include "test/read_answer.hpp"
-
-//---------------------------------------------------------------------------------------------------------------
-
-namespace
-{
-__attribute__ ((noreturn))
-static void failed_open_answer_file(const char* answer_file);
-
-__attribute__ ((noreturn))
-static void failed_read_answer     (const char* answer_file);
-
-} // namespace
+#include "read_answer.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
-test_answer_t::test_answer_t (const char* answer_file)
+test_answer_t::test_answer_t(const char* answer_file)
 {
-    assert(answer_file);
+    assert(answer_file_);
 
-    std::ifstream file(answer_file);
+    answer_file_ = answer_file;
+
+    std::ifstream file(answer_file_);
     
     if (!file.is_open())
-        failed_open_answer_file(answer_file);
+        failed_open_answer_file();
     
     file >> test_answer_;
 
     if (file.fail())
-        failed_read_answer(answer_file);
+        failed_read_answer();
 
     file.close();
 }
 
 //---------------------------------------------------------------------------------------------------------------
 
-namespace // for only constructor needed funtions
+// public methodes
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+size_t test_answer_t::get_test_answer()
 {
+    return test_answer_;
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+// private methods
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+void test_answer_t::open_answer_file()
+{
+    assert(answer_file_);
+ 
+    file_.open(answer_file_);
+    
+    if (!file_.is_open())
+        failed_open_answer_file();
+}
+
+
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-static void failed_open_answer_file(const char* answer_file)
+void test_answer_t::failed_open_answer_file()
 {
-    assert(answer_file);
+    assert(answer_file_);
 
-    std::cerr << "Failed open '" << answer_file << "'"
+    std::cerr << "Failed open '" << answer_file_ << "'"
               << std::endl;
 
     exit(EXIT_FAILURE);
@@ -56,16 +73,14 @@ static void failed_open_answer_file(const char* answer_file)
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-static void failed_read_answer(const char* answer_file)
+void test_answer_t::failed_read_answer()
 {
-    assert(answer_file);
+    assert(answer_file_);
 
-    std::cerr << "Failed read answer from '" << answer_file
+    std::cerr << "Failed read answer from '" << answer_file_
               << "'" << std::endl;
 
     exit(EXIT_FAILURE);
 }
 
 //---------------------------------------------------------------------------------------------------------------
-
-} // namespace
