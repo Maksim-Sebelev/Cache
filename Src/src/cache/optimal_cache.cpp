@@ -1,12 +1,26 @@
 #include <iostream>
+#include <vector>
 
 #include "optimal_cache.hpp"
-
-
-// this is Belady`s algorith
-
-
-size_t get_optimal_hits_quantity()
+/*
+int main()
 {
-    return 0;
-}
+    std::size_t capacity = 0;
+    std::size_t amount_numbers = 0;
+
+    std::cin >> capacity >> amount_numbers; 
+
+    std::vector<std::pair<int, int>> input_items(amount_numbers);
+
+    for (std::size_t i = 0; i < amount_numbers;i++)
+    {
+        std::cin >> input_items[i].first;
+        input_items[i].second = input_items[i].first;
+    }
+
+    OPT_cache<int, int> cache(capacity, amount_numbers, input_items);
+
+    cache.run_optimal_cache();
+
+    std::cout << "hits: " << cache.get_hit_count() << std::endl;
+}*/
