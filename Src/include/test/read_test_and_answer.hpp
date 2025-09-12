@@ -33,5 +33,54 @@ struct test_data_t
 };
 
 //---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
+test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
+{}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+test_data_t<input_t>::~test_data_t()
+{
+    test_input_ .~test_input_t ();
+    test_answer_.~test_answer_t();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+size_t test_data_t<input_t>::get_test_answer()
+{
+    return test_answer_.get_test_answer();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+size_t test_data_t<input_t>::get_cache_size()
+{
+    return test_input_.get_cache_size();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+size_t test_data_t<input_t>::get_input_size()
+{
+    return test_input_.get_input_size();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+input_t test_data_t<input_t>::get_i_element_of_data(size_t i)
+{
+    return test_input_.get_i_element_of_data(i);
+}
+
+//---------------------------------------------------------------------------------------------------------------
 
 #endif // TEST_TEST_AND_ANSWER_HPP

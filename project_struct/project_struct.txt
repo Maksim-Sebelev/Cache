@@ -6,10 +6,11 @@
 │   ├── CMakeLists.txt
 │   ├── include
 │   │   ├── cache
-│   │   │   ├── arc_cache.hpp
-│   │   │   └── optimal_cache.hpp
+│   │   │   ├── arc
+│   │   │   │   └── arc_cache.hpp
+│   │   │   └── optimal
+│   │   │       └── optimal_cache.hpp
 │   │   └── test
-│   │       ├── cache_test.hpp
 │   │       ├── check_args.hpp
 │   │       ├── read_answer.hpp
 │   │       ├── read_test_and_answer.hpp
@@ -17,20 +18,27 @@
 │   │       └── test_files.hpp
 │   └── src
 │       ├── cache
-│       │   ├── arc_cache.cpp
-│       │   ├── main.cpp
-│       │   └── optimal_cache.cpp
+│       │   ├── arc
+│       │   │   ├── arc_cache.cpp
+│       │   │   └── arc_main.cpp
+│       │   └── optimal
+│       │       ├── optimal_cache.cpp
+│       │       └── optimal_main.cpp
 │       └── test
 │           ├── cache_test.cpp
-│           ├── check_args.cpp
-│           ├── read_answer.cpp
-│           ├── read_test_and_answer.cpp
-│           ├── read_test.cpp
-│           └── test_files.cpp
+│           └── check_args.cpp
 └── tests
-    ├── 1.ans
-    ├── 1.dat
-    ├── 2.ans
-    └── 2.dat
+    ├── arc
+    │   ├── ans
+    │   │   ├── 1.ans
+    │   │   └── 2.ans
+    │   └── dat
+    │       ├── 1.dat
+    │       └── 2.dat
+    └── optimal
+        ├── ans
+        │   └── 1.ans
+        └── dat
+            └── 1.dat
 
-10 directories, 24 files
+20 directories, 22 files
