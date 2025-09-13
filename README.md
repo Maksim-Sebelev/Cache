@@ -48,10 +48,13 @@ ctest --verbose
 .
 ├── build # рабочая директория (создается Вами)
 │   └── <some files created with cmake>
-├── .gitignore
 ├── README.md
+├── .gitignore
+├── assets
+│   └── weffc++.png
 ├── project_struct
 │   └── project_struct.txt
+│
 ├── Src
 │   ├── CMakeLists.txt
 │   ├── include
@@ -67,34 +70,54 @@ ctest --verbose
 │   │       ├── read_test.hpp
 │   │       └── test_files.hpp
 │   └── src
-│       ├── cache
-│       │   ├── arc
-│       │   │   ├── arc_cache.cpp
-│       │   │   └── arc_main.cpp
-│       │   └── optimal
-│       │       ├── optimal_cache.cpp
-│       │       └── optimal_main.cpp
 │       └── test
 │           ├── arc_cache_test.cpp
 │           ├── check_args.cpp
 │           └── optimal_cache_test.cpp
 └── tests
-    ├── ans
-    │   ├── arc
+    ├── arc
+    │   ├── ans
     │   │   ├── 1.ans
     │   │   ├── 2.ans
-    │   │   └── 3.ans
-    │   └── optimal
-    │       ├── 1.ans
-    │       ├── 2.ans
-    │       └── 3.ans
-    └── dat
-        ├── 1.dat
-        ├── 2.dat
-        └── 3.dat
+    │   │   ├── 3.ans
+    │   │   ├── 4.ans
+    │   │   ├── 5.ans
+    │   │   ├── 6.ans
+    │   │   ├── 7.ans
+    │   │   └── 8.ans
+    │   └── dat
+    │       ├── 1.dat
+    │       ├── 2.dat
+    │       ├── 3.dat
+    │       ├── 4.dat
+    │       ├── 5.dat
+    │       ├── 6.dat
+    │       ├── 7.dat
+    │       └── 8.dat
+    └── optimal
+        ├── ans
+        │   ├── 1.ans
+        │   ├── 2.ans
+        │   ├── 3.ans
+        │   ├── 4.ans
+        │   ├── 5.ans
+        │   ├── 6.ans
+        │   ├── 7.ans
+        │   ├── 8.ans
+        │   └── 9.ans
+        └── dat
+            ├── 1.dat
+            ├── 2.dat
+            ├── 3.dat
+            ├── 4.dat
+            ├── 5.dat
+            ├── 6.dat
+            ├── 7.dat
+            ├── 8.dat
+            ├── 9.ans
+            └── 9.dat
 
-19 directories, 28 files
-
+18 directories, 49 files
 ```
 
 ## Как добавить тесты?
