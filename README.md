@@ -1,8 +1,8 @@
-# ARC-кеш от студентов 2 курса РТ
+# ARC-кеш (+ Belady-кеш) от студентов 2 курса РТ
 ## Авторы: Лобачев Артем, Себелев Максим
 
 ## Зависимости:
-У проекта **нет обязательных зависимостей**, но для удобной работы могут понадобиться:\
+У проекта *нет обязательныз зависимостей*, но для удобной работы могут понадобиться:\
 [git](https://git-scm.com/ "ссылка на официальный сайт git")\
 [make](https://www.gnu.org/software/make/ "ссылка на оффициальный сайт make") \
 [cmake](https://cmake.org/ "с\сылка на официальный сайт cmake")
@@ -45,18 +45,19 @@ ctest --verbose
 .
 ├── build # рабочая директория (создается Вами)
 │   └── <some files created with cmake>
-├── README.md
 ├── .gitignore
+├── README.md
 ├── project_struct
 │   └── project_struct.txt
 ├── Src
 │   ├── CMakeLists.txt
 │   ├── include
 │   │   ├── cache
-│   │   │   ├── arc_cache.hpp
-│   │   │   └── optimal_cache.hpp
+│   │   │   ├── arc
+│   │   │   │   └── arc_cache.hpp
+│   │   │   └── optimal
+│   │   │       └── optimal_cache.hpp
 │   │   └── test
-│   │       ├── cache_test.hpp
 │   │       ├── check_args.hpp
 │   │       ├── read_answer.hpp
 │   │       ├── read_test_and_answer.hpp
@@ -64,28 +65,66 @@ ctest --verbose
 │   │       └── test_files.hpp
 │   └── src
 │       ├── cache
-│       │   ├── arc_cache.cpp
-│       │   ├── main.cpp
-│       │   └── optimal_cache.cpp
+│       │   ├── arc
+│       │   │   ├── arc_cache.cpp
+│       │   │   └── arc_main.cpp
+│       │   └── optimal
+│       │       ├── optimal_cache.cpp
+│       │       └── optimal_main.cpp
 │       └── test
-│           ├── cache_test.cpp
+│           ├── arc_cache_test.cpp
 │           ├── check_args.cpp
-│           ├── read_answer.cpp
-│           ├── read_test_and_answer.cpp
-│           ├── read_test.cpp
-│           └── test_files.cpp
+│           └── optimal_cache_test.cpp
 └── tests
-    ├── 1.ans
-    ├── 1.dat
-    ├── 2.ans
-    └── 2.dat
+    ├── ans
+    │   ├── arc
+    │   │   ├── 1.ans
+    │   │   ├── 2.ans
+    │   │   └── 3.ans
+    │   └── optimal
+    │       ├── 1.ans
+    │       ├── 2.ans
+    │       └── 3.ans
+    └── dat
+        ├── 1.dat
+        ├── 2.dat
+        └── 3.dat
 
-10 directories, 24 files
+19 directories, 28 files
+
 ```
 
+## Как добавить тесты?
+Тестирование происходит сразу для двух алгоритмов - arc и belady. \
+Вот так на момент написани README.md выглядит структура папки tests:
+```text
+tests
+    ├── ans
+    │   ├── arc       # ответы для arc cache
+    │   │   ├── 1.ans
+    │   │   ├── 2.ans
+    │   │   └── 3.ans
+    │   └── optimal   # ответы для optimal cache
+    │       ├── 1.ans
+    │       ├── 2.ans
+    │       └── 3.ans
+    └── dat           # общие тестовые данные
+        ├── 1.dat
+        ├── 2.dat
+        └── 3.dat
+```
+Положим `.` корневой папкой проекта.
+Если Вы хотите добавить тесты для `arc cache`, то добавьте в папку `./tests/dat/` файлы с соответсвующим содержимым и названиями `<n>.dat`.
+Для каждого вашего теста добавьте в папку `./tests/ans/arc/` соотвествующий файл с тем же названием, что и его тестовый файл `<n>.ans`.\
+Аналогично для `optimal cache`.\
+**Обратите внимание**, что тестовые данные одинаковы для обоих кешей.\
+После просто выполните
+```bash
+cmake ../Src
+make test
+```
+из папки `./build`. Ваши тесты будут включеные в тестирование и Вы увидете всю необходимую информацию о ваших тестах.
 
-## Почему тестирования такое мудренное?
-Нам хотелось потренироваться в синтаксисе на нашем первом проекте на С++, чего не позволило бы простое написание кеша и легеньких тестов.
 
 ## Почему авторов двое?
 В силу ограниченности времени обязанности написания проекта были распределены: Максим писал тестироавание + Cmake, Артем писал алгоритмы кеширования (arc + belady).\
@@ -98,3 +137,4 @@ ctest --verbose
 # Проблемы проекта:
 ## 1
 Нет разделения на дебажную и релизную версии проекта. Причина - отсутствие времени
+
