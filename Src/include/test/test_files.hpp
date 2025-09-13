@@ -5,8 +5,8 @@
 
 struct test_files_t
 {
-    const char* test_file_  ;
-    const char* answer_file_;
+    std::string test_file_  ;
+    std::string answer_file_;
 
     test_files_t(const char* test_file, const char* answer_file);
 };

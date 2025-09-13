@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------------------------------------------
 
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
     check_args(argc, argv); // exit 1 if not correct
 

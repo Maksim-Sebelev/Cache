@@ -20,7 +20,7 @@ git clone https://github.com/Maksim-Sebelev/Cache
 cd Cache/
 mkdir build/
 cd build
-cmake ../Src
+cmake -S ../Src -DCMAKE_BUILD_TYPE=Release # или =Debug для дебажной версии
 ```
 
 ## Комплиляция:
@@ -133,11 +133,32 @@ make test
 В силу ограниченности времени обязанности написания проекта были распределены: Максим писал тестироавание + Cmake, Артем писал алгоритмы кеширования (arc + belady).\
 Но это не значит, что каждый делал только свое дело, не разбираясь в деле сокомандника. По итогу каждый получил опыт написания кеша, опыт работы с Cmake и опыт написания тестов (самое сложно было заставить cmake эти тесты делать)
 
-## Понимаем ли мы, что если так дальше париться над каждым проектом, то выгорание наступит через пару недель?
-Да.
-
-
 # Проблемы проекта:
-## 1
-Нет разделения на дебажную и релизную версии проекта. Причина - отсутствие времени
+Мы прекрасно знаем, что Cmake лучше знает какие флаги для релизной и дебажной версии нужны.
+О чем говорил Константин Владимиров в своей лекции по системам сборкам.
+Но мы не удержались, чтобы насильно не воткнуть так называемые "флаги Деда" (Дед = Дединский Илья Рудольфович), которые служили нам верой и правдой весь 1 курс. И здесь они себя неплохо проявили, показав множество неточностей и неэффективностей в коде.\
+Особое внимание заслужил флаг `-Weffc++`. Он единолично заставлял сиять наши экраны от бесконечных warning
+
+![Warning from -Weffc++](./assets/weffc++.png)
+
+поэтому в целях экономии времени и неполного понимания его претензий к коду он был позорно занесен под комментарий (но не удален).
+
+```cmake
+set(DEBUG_FLAGS
+	-g -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall
+	-Wextra -Wcast-align -Wcast-qual -Wchar-subscripts -Wconditionally-supported
+	-Waggressive-loop-optimizations -Wc++14-compat -Wmissing-declarations
+	-Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op
+	-Wnon-virtual-dtor -Wopenmp-simd -Woverloaded-virtual -Wpacked -Wpointer-arith
+	-Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal -Wformat-nonliteral
+	-fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer -Wstack-usage=8192
+	-Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel
+	-Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types
+	-Wsuggest-override -Wswitch-default -Wsync-nand -Wundef -Wunreachable-code -Wunused
+	-Wuseless-cast -Wvariadic-macros -Wno-literal-suffix -Wno-missing-field-initializers -Wno-narrowing
+	-Wno-old-style-cast -Wno-varargs -Wstack-protector -fcheck-new -fsized-deallocation -fstack-protector
+	-pie -fPIE -Werror=vla 				
+	# -Weffc++
+)
+```
 

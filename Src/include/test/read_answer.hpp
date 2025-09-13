@@ -16,18 +16,22 @@ struct test_answer_t
     public:
         // struct public methods    
         size_t get_test_answer();
-        test_answer_t         (const char* answer_file); // ctor
+
+        // ctor
+        test_answer_t(std::string answer_file);
     
     private:
         // struct private vairable
         size_t        test_answer_ ;
         std::ifstream file_        ;
-        const char*   answer_file_ ;
+        std::string   answer_file_ ;
         
         // struct private methods
         void open_answer_file       ();
+
         __attribute__ ((noreturn))
         void failed_open_answer_file();
+
         __attribute__ ((noreturn))
         void failed_read_answer     ();
 };
@@ -38,12 +42,9 @@ struct test_answer_t
 // ctor
 //---------------------------------------------------------------------------------------------------------------
 
-test_answer_t::test_answer_t(const char* answer_file)
+test_answer_t::test_answer_t(std::string answer_file) :
+answer_file_(answer_file)
 {
-    assert(answer_file_);
-
-    answer_file_ = answer_file;
-
     std::ifstream file(answer_file_);
     
     if (!file.is_open())
@@ -78,8 +79,6 @@ size_t test_answer_t::get_test_answer()
 
 void test_answer_t::open_answer_file()
 {
-    assert(answer_file_);
- 
     file_.open(answer_file_);
     
     if (!file_.is_open())
@@ -92,8 +91,6 @@ void test_answer_t::open_answer_file()
 __attribute__ ((noreturn))
 void test_answer_t::failed_open_answer_file()
 {
-    assert(answer_file_);
-
     std::cerr << "Failed open '" << answer_file_ << "'"
               << std::endl;
 
@@ -105,8 +102,6 @@ void test_answer_t::failed_open_answer_file()
 __attribute__ ((noreturn))
 void test_answer_t::failed_read_answer()
 {
-    assert(answer_file_);
-
     std::cerr << "Failed read answer from '" << answer_file_
               << "'" << std::endl;
 

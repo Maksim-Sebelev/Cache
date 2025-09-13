@@ -3,24 +3,26 @@
 #include <cassert>
 #include <cstring>
 
-//---------------------------------------------------------------------------------------------------------------
-
-__attribute__ ((noreturn))
-static void        bad_args_quant       (const char* exe_file);
-
-__attribute__ ((noreturn))
-static void        bad_test_extension   (const char* test_file);
-
-__attribute__ ((noreturn))
-static void        bad_answer_extension (const char* answer_file);
-
-static const char* get_file_extension   (const char* file_name  );
-static bool        is_file_test         (const char* test_file  );
-static bool        is_file_answer       (const char* answer_file);
+#include "check_args.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
-void check_args(int argc, char* argv[])
+__attribute__ ((noreturn))
+static void        bad_args_quant       (const std::string& exe_file);
+
+__attribute__ ((noreturn))
+static void        bad_test_extension   (const std::string& test_file);
+
+__attribute__ ((noreturn))
+static void        bad_answer_extension (const std::string& answer_file);
+
+static std::string get_file_extension   (const std::string& file_name  );
+static bool        is_file_test         (const std::string& test_file  );
+static bool        is_file_answer       (const std::string& answer_file);
+
+//---------------------------------------------------------------------------------------------------------------
+
+void check_args(int argc, const char* argv[])
 {
     assert(argv);
 
@@ -30,8 +32,8 @@ void check_args(int argc, char* argv[])
     if (argc != correct_argument_quantity)
         bad_args_quant(argv[0]); // exit 1
 
-    const char* test_file   = argv[1]; assert(test_file  );
-    const char* answer_file = argv[2]; assert(answer_file);
+    std::string test_file  (argv[1]);
+    std::string answer_file(argv[2]);
 
     if (!is_file_test(test_file))
         bad_test_extension(test_file); // exit 1
@@ -45,10 +47,8 @@ void check_args(int argc, char* argv[])
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-static void bad_args_quant(const char* exe_file)
+static void bad_args_quant(const std::string& exe_file)
 {
-    assert(exe_file);
-
     std::cerr << "Needed 2 argmunets - test and answer file name"
               << std::endl
               << "Usage: "
@@ -62,10 +62,8 @@ static void bad_args_quant(const char* exe_file)
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-static void bad_test_extension(const char* test_file)
+static void bad_test_extension(const std::string& test_file)
 {
-    assert(test_file);
-
     std::cerr << "\'" << test_file << "\'" << "is not a test file."
               << std::endl
               << "Correct is *.dat"
@@ -77,10 +75,8 @@ static void bad_test_extension(const char* test_file)
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-static void bad_answer_extension(const char* answer_file)
+static void bad_answer_extension(const std::string& answer_file)
 {
-    assert(answer_file);
-
     std::cerr << "\'" << answer_file << "\' is not a answer file."
               << std::endl
               << "Correct is *.ans"
@@ -91,39 +87,39 @@ static void bad_answer_extension(const char* answer_file)
 
 //---------------------------------------------------------------------------------------------------------------
 
-// return nullptr if file didn`t have an extension
-const char* get_file_extension(const char* file_name)
+// return empty string if file didn`t have an extension
+std::string get_file_extension(const std::string& filename)
 {
-    assert(file_name);
+    const size_t dot_pos = filename.rfind('.');
 
-    const char* dot = strrchr(file_name, '.');
+    if ((dot_pos != std::string::npos) && // dot is found
+        (dot_pos + 1 < filename.size()))  // dot isn`t last symbol
+    
+        return filename.substr(dot_pos); // return ".govno"
 
-    if ((!dot) || (dot == file_name))
-        return nullptr; // if file didn`t have extension
-
-    return dot;
+    return "";
 }
 
 //---------------------------------------------------------------------------------------------------------------
 
-#define check_extension(file, needed_extension) \
-assert(file);                                    \
-const char* extension = get_file_extension(file); \
-return  (extension &&                              \
-        (strcmp(extension, needed_extension) == 0)  \
-        );                                           \
+#define check_extension(file, needed_extension)  \
+std::string extension = get_file_extension(file); \
+return  (                                          \
+        (extension != "") &&                        \
+        (extension == needed_extension)              \
+        );                                            \
 
 
 //---------------------------------------------------------------------------------------------------------------
 
-static bool is_file_test(const char* test_file)
+static bool is_file_test(const std::string& test_file)
 {
     check_extension(test_file, ".dat");
 }
 
 //---------------------------------------------------------------------------------------------------------------
 
-static bool is_file_answer(const char* answer_file)
+static bool is_file_answer(const std::string& answer_file)
 {
     check_extension(answer_file, ".ans");
 }

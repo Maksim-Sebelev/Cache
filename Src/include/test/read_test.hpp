@@ -19,7 +19,7 @@ struct test_input_t
         input_t get_i_element_of_data(size_t i);
 
         // ctor
-        test_input_t(const char* test_file);
+        test_input_t(const std::string& test_file);
 
         // dtor
        ~test_input_t();
@@ -30,7 +30,7 @@ struct test_input_t
         size_t        input_size_;
         input_t*      data_      ;
         std::ifstream file_      ;
-        const char*   test_file_ ;
+        std::string   test_file_ ;
 
         // struct private methods
         void          open_test_file                         ();
@@ -61,12 +61,9 @@ struct test_input_t
 
 // ctor
 template <typename input_t>
-test_input_t<input_t>::test_input_t(const char* test_file)
+test_input_t<input_t>::test_input_t(const std::string& test_file) :
+test_file_(test_file)
 {
-    assert(test_file);
-
-    test_file_ = test_file;
-
     open_test_file ();
     read_cache_size();
     read_input_size();
@@ -83,7 +80,7 @@ test_input_t<input_t>::~test_input_t()
     if (!data_)
         return;
 
-    delete data_;
+    delete[] data_;
 }
 //---------------------------------------------------------------------------------------------------------------
 
@@ -130,7 +127,7 @@ void test_input_t<input_t>::open_test_file()
     file_.open(test_file_);
     
     if (file_.fail())
-        failed_open_test_file();
+        failed_open_test_file(); // exit 1
 }
 //---------------------------------------------------------------------------------------------------------------
 
@@ -168,7 +165,7 @@ void test_input_t<input_t>::read_test_data()
 {
     if (is_test_empty()) return; // no allocation memory for empty test
 
-    data_ = new input_t(input_size_);
+    data_ = new input_t[input_size_];
 
     if (!data_)
         failed_allocate_memory_for_input_array(); // exit 1
@@ -177,8 +174,8 @@ void test_input_t<input_t>::read_test_data()
     {
         file_ >> data_[input_iter];
         
-        if (!file_.fail()) continue;;
-    
+        if (!file_.fail()) continue;
+
         failed_read_i_page(input_iter); // exit 1
     }
 }
@@ -191,8 +188,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_open_test_file()
 {
-    assert(test_file_);
-
     std::cerr << "Failed open '" << test_file_ << "'"
               << std::endl;
 
@@ -205,8 +200,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_read_cache_size()
 {
-    assert(test_file_);
-
     std::cerr << "Failed read cache size from '" << test_file_ << "'"
               << std::endl;
 
@@ -219,8 +212,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_read_input_size()
 {
-    assert(test_file_);
-
     std::cerr << "Failed read input size from '" << test_file_ << "'"
               << std::endl;
 
@@ -233,8 +224,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_allocate_memory_for_input_array()
 {
-    assert(test_file_);
-
     std::cerr << "Failed allocate for input from '" << test_file_
               << "'" << std::endl;
 
@@ -247,8 +236,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_read_i_page(size_t number_of_bad_page)
 {
-    assert(test_file_);
-
     std::cerr << "failed read " << number_of_bad_page << " page from '"
               << test_file_ << "'" << std::endl;
 
@@ -261,8 +248,6 @@ template <typename input_t>
 __attribute__ ((noreturn))
 void test_input_t<input_t>::index_out_of_range(size_t index)
 {
-    assert(test_file_);
-
     std::cerr << "truing to get no exists element in input." << std::endl
     << "your index = " << index << std::endl
     << "data size  = " << input_size_ << std::endl;
