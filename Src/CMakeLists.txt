@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 project(Cache
 	LANGUAGES CXX
@@ -172,11 +172,13 @@ function(add_testing test_executable test_dir)
 		set(test_name ${test_executable}_${test_num})
 
 		# add test
+		
+		message("./${test_executable} ${test_file} ${answer_file}")
+		
 		add_test(
 			NAME ${test_name}
 			# execute test
 			COMMAND ./${test_executable} ${test_file} ${answer_file}
-
 			# working directory - dircetory with executable file
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 		)
