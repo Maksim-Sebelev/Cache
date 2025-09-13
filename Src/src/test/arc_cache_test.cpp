@@ -22,6 +22,11 @@ int main(int argc, char* argv[])
     test_data.dump();
     )
 
+    test_data.get_cache_size       ();
+    test_data.get_input_size       ();
+    test_data.get_i_element_of_data(10);
+    test_data.get_test_answer      ();
+
     // тема, вот здесь делай функцию для теста оптимального хеша
 
     return EXIT_SUCCESS;

@@ -38,10 +38,9 @@
     │       ├── 1.ans
     │       ├── 2.ans
     │       └── 3.ans
-    ├── compare_results
     └── dat
         ├── 1.dat
         ├── 2.dat
         └── 3.dat
 
-19 directories, 26 files
+18 directories, 26 files
