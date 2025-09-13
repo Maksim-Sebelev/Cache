@@ -10,6 +10,14 @@
 
 //---------------------------------------------------------------------------------------------------------------
 
+#ifdef DEBUG_
+#define ON_DEBUG(...) __VA_ARGS__
+#else // DEBUG_
+#define ON_DEBUG(...)
+#endif // DEBUG_
+
+//---------------------------------------------------------------------------------------------------------------
+
 template <typename input_t>
 struct test_data_t
 {
@@ -23,31 +31,38 @@ struct test_data_t
         // ctor
         test_data_t(const test_files_t& test_files);
 
-        // dtor
-       ~test_data_t();
-
-       size_t  get_test_answer      ();
-       size_t  get_cache_size       ();
-       size_t  get_input_size       ();
-       input_t get_i_element_of_data(size_t i);
+        ON_DEBUG(
+        void dump();
+        )
+        size_t  get_test_answer      ();
+        size_t  get_cache_size       ();
+        size_t  get_input_size       ();
+        input_t get_i_element_of_data(size_t i);
 };
 
 //---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+ON_DEBUG(
+template <typename input_t>
+void test_data_t<input_t>::dump()
+{
+    std::cout << "ans        = " << get_test_answer() << std::endl;
+    std::cout << "cache size = " << get_cache_size() << std::endl;
+    std::cout << "input size = " << get_input_size() << std::endl;
+
+    for (size_t i = 0; i < get_input_size(); i++)
+        std::cout << "input[" << i << "] = " << get_i_element_of_data(i) << std::endl;
+}
+)
+
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename input_t>
 test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
 test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
 {}
-
-//---------------------------------------------------------------------------------------------------------------
-
-template <typename input_t>
-test_data_t<input_t>::~test_data_t()
-{
-    test_input_ .~test_input_t ();
-    test_answer_.~test_answer_t();
-}
 
 //---------------------------------------------------------------------------------------------------------------
 

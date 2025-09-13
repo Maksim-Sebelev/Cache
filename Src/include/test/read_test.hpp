@@ -39,7 +39,7 @@ struct test_input_t
         void          read_test_data                         ();
         void          close_test_file                        ();
 
-        bool          is_test_empty                          (size_t input_size);
+        bool          is_test_empty                          ();
         bool          is_index_out_of_range                  (size_t index);
 
         __attribute__ ((noreturn))
@@ -70,10 +70,8 @@ test_input_t<input_t>::test_input_t(const char* test_file)
     open_test_file ();
     read_cache_size();
     read_input_size();
-
-    if (is_test_empty(input_size_)) return; // no allocation memory for empty test
-
-    read_test_data();
+    read_test_data ();
+    close_test_file();
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -81,13 +79,12 @@ test_input_t<input_t>::test_input_t(const char* test_file)
 // dtor
 template <typename input_t>
 test_input_t<input_t>::~test_input_t()
-{
+{    
     if (!data_)
-        return; // if nullptr => empty test and no allocation memory
+        return;
 
     delete data_;
 }
-
 //---------------------------------------------------------------------------------------------------------------
 
 // public methods
@@ -169,6 +166,8 @@ void test_input_t<input_t>::close_test_file()
 template <typename input_t>
 void test_input_t<input_t>::read_test_data()
 {
+    if (is_test_empty()) return; // no allocation memory for empty test
+
     data_ = new input_t(input_size_);
 
     if (!data_)
@@ -178,7 +177,7 @@ void test_input_t<input_t>::read_test_data()
     {
         file_ >> data_[input_iter];
         
-        if (!file_.fail()) break;
+        if (!file_.fail()) continue;;
     
         failed_read_i_page(input_iter); // exit 1
     }
@@ -274,9 +273,9 @@ void test_input_t<input_t>::index_out_of_range(size_t index)
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename input_t>
-bool test_input_t<input_t>::is_test_empty(size_t input_size)
+bool test_input_t<input_t>::is_test_empty()
 {
-    return (input_size == 0);
+    return (input_size_ == 0);
 }
 
 //---------------------------------------------------------------------------------------------------------------

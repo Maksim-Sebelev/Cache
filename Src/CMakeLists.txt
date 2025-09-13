@@ -81,13 +81,15 @@ add_custom_target(${REBUILD_TARGET}
 # we are compiling the cache function
 # for testing separately and with some another settings
 
+
+# arc 
 set(ARC_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test    )
 set(ARC_CACHE_TEST_INC_DIR ${PROJECT_SOURCE_DIR}/include/test)
-set(ARC_CACHE_TEST_EXE     cache_test  )
+set(ARC_CACHE_TEST_EXE     arc_cache_test                    )
 
 set(ARC_CACHE_TEST_SRC
 	# cache test files
-	${ARC_CACHE_TEST_SRC_DIR}/cache_test.cpp
+	${ARC_CACHE_TEST_SRC_DIR}/arc_cache_test.cpp
 	${ARC_CACHE_TEST_SRC_DIR}/check_args.cpp
 
 	# cache function
@@ -105,12 +107,37 @@ target_include_directories(${ARC_CACHE_TEST_EXE}
 		${ARC_CACHE_INC_DIR}
 )
 
+# ==========
+# optimal
+set(OPTIMAL_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test    )
+set(OPTIMAL_CACHE_TEST_INC_DIR ${PROJECT_SOURCE_DIR}/include/test)
+set(OPTIMAL_CACHE_TEST_EXE     optimal_cache_test                )
+
+set(OPTIMAL_CACHE_TEST_SRC
+	# cache test files
+	${OPTIMAL_CACHE_TEST_SRC_DIR}/optimal_cache_test.cpp
+	${OPTIMAL_CACHE_TEST_SRC_DIR}/check_args.cpp
+
+	# cache function
+	${OPTIMAL_CACHE_SRC_DIR}/optimal_cache.cpp
+)
+
+add_executable(${OPTIMAL_CACHE_TEST_EXE} 
+				EXCLUDE_FROM_ALL # this executable file is depending on target 'ready_for_test'
+			   ${OPTIMAL_CACHE_TEST_SRC}
+)
+
+target_include_directories(${OPTIMAL_CACHE_TEST_EXE}
+	PRIVATE
+		${OPTIMAL_CACHE_TEST_INC_DIR}
+		${OPTIMAL_CACHE_INC_DIR}
+)
+
 # =============================================================================================================
 # creating tests
 
 enable_testing()
 include(CTest)
-
 
 
 # function for adding tests to some executable files
@@ -141,11 +168,8 @@ function(add_testing test_executable test_dir)
 		set(answer_file "${test_file_directory}/../ans/${test_file_name}.ans")
 
 		# create test_name
-		
 		get_filename_component(test_num "${test_file}" NAME_WE)
 		set(test_name ${test_executable}_${test_num})
-
-		message(${test_name})
 
 		# add test
 		add_test(
@@ -163,7 +187,7 @@ endfunction(add_testing)
 
 # run this target, to compile executable for testing
 add_custom_target(ready_for_tests
-	DEPENDS ${ARC_CACHE_EXE} ${OPTIMAL_CACHE_EXE}
+	DEPENDS ${ARC_CACHE_TEST_EXE} ${OPTIMAL_CACHE_TEST_EXE}
 )
 
 # get directory with all tests
@@ -172,5 +196,5 @@ set(GLOBAL_TEST_DIR  ${CMAKE_SOURCE_DIR}/../tests)
 set(ARC_TEST_DIR     ${GLOBAL_TEST_DIR}/arc    )
 set(OPTIMAL_TEST_DIR ${GLOBAL_TEST_DIR}/optimal)
 
-add_testing(${ARC_CACHE_EXE}     ${ARC_TEST_DIR}    ) # testing arc     cache
-add_testing(${OPTIMAL_CACHE_EXE} ${OPTIMAL_TEST_DIR}) # testing optimal cache
+add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_DIR}    ) # testing arc     cache
+add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPTIMAL_TEST_DIR}) # testing optimal cache
