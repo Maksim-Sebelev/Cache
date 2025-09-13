@@ -111,7 +111,6 @@ set(ARC_CACHE_TEST_SRC
 )
 
 add_executable(${ARC_CACHE_TEST_EXE} 
-				EXCLUDE_FROM_ALL # this executable file is depending on target 'ready_for_test'
 			   ${ARC_CACHE_TEST_SRC}
 )
 
@@ -137,7 +136,6 @@ set(OPTIMAL_CACHE_TEST_SRC
 )
 
 add_executable(${OPTIMAL_CACHE_TEST_EXE} 
-				EXCLUDE_FROM_ALL # this executable file is depending on target 'ready_for_test'
 			   ${OPTIMAL_CACHE_TEST_SRC}
 )
 
@@ -193,12 +191,6 @@ function(add_testing test_executable test_dir ans_dir)
 	endforeach()
 
 endfunction(add_testing)
-
-
-# run this target, to compile executable for testing
-add_custom_target(ready_for_tests
-	DEPENDS ${ARC_CACHE_TEST_EXE} ${OPTIMAL_CACHE_TEST_EXE}
-)
 
 # get directory with all tests
 
