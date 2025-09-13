@@ -72,6 +72,7 @@ test_input_t<input_t>::test_input_t(const char* test_file)
     read_input_size();
     read_test_data ();
     close_test_file();
+
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -168,7 +169,7 @@ void test_input_t<input_t>::read_test_data()
 {
     if (is_test_empty()) return; // no allocation memory for empty test
 
-    data_ = new input_t(input_size_);
+    data_ = new input_t[input_size_];
 
     if (!data_)
         failed_allocate_memory_for_input_array(); // exit 1
