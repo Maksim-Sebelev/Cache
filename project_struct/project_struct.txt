@@ -1,11 +1,4 @@
 .
-├── compare_arc_and_optimal
-│   ├── dat
-│   │   ├── 1.dat
-│   │   └── 2.dat
-│   └── result
-│       ├── arc
-│       └── optimal
 ├── project_struct
 │   └── project_struct.txt
 ├── README.md
@@ -36,21 +29,19 @@
 │           ├── check_args.cpp
 │           └── optimal_cache_test.cpp
 └── tests
-    ├── arc
-    │   ├── ans
+    ├── ans
+    │   ├── arc
     │   │   ├── 1.ans
     │   │   ├── 2.ans
     │   │   └── 3.ans
-    │   └── dat
-    │       ├── 1.dat
-    │       ├── 2.dat
-    │       └── 3.dat
-    └── optimal
-        ├── ans
-        │   ├── 1.ans
-        │   └── 2.ans
-        └── dat
-            ├── 1.dat
-            └── 2.dat
+    │   └── optimal
+    │       ├── 1.ans
+    │       ├── 2.ans
+    │       └── 3.ans
+    ├── compare_results
+    └── dat
+        ├── 1.dat
+        ├── 2.dat
+        └── 3.dat
 
-25 directories, 29 files
+19 directories, 26 files

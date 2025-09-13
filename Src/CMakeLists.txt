@@ -141,21 +141,27 @@ include(CTest)
 
 
 # function for adding tests to some executable files
-function(add_testing test_executable test_dir)
+function(add_testing test_executable ans_dir)
 
-	if(NOT EXISTS ${test_dir})
-		message(WARNING "Test directory not found: ${test_dir}")
+	if (NOT EXISTS ${ans_dir})
+		message(WARNING "Answer directiry not found: ${ans_dir}")
+	endif()
+
+	set(TEST_DIR ${CMAKE_SOURCE_DIR}/../tests/dat)
+
+	if(NOT EXISTS ${TEST_DIR})
+		message(WARNING "Test directory not found: ${TEST_DIR}")
 		return()
 	endif()
 
-	file(GLOB test_files "${test_dir}/dat/*.dat") # save all tests -files in variable 'test_files'
+	file(GLOB test_files "${TEST_DIR}/*.dat") # save all tests -files in variable 'test_files'
 
 	# get quantity of tests
 	list(LENGTH test_files num_tests)
 
 	# check that at least 1 test was found
 	if(${num_tests} EQUAL 0)
-		message(WARNING "No .dat files found in ${test_dir}")
+		message(WARNING "No .dat files found in ${TEST_DIR}")
 		return()
 	endif()
 
@@ -165,7 +171,7 @@ function(add_testing test_executable test_dir)
 		# get name of answer file
 		get_filename_component(test_file_name      "${test_file}" NAME_WE)   # NAME_WE = без расширения
 		get_filename_component(test_file_directory "${test_file}" DIRECTORY) # DIRECTTORY = только путь, без файла
-		set(answer_file "${test_file_directory}/../ans/${test_file_name}.ans")
+		set(answer_file "${ans_dir}/${test_file_name}.ans")
 
 		# create test_name
 		get_filename_component(test_num "${test_file}" NAME_WE)
@@ -185,16 +191,19 @@ function(add_testing test_executable test_dir)
 
 endfunction(add_testing)
 
+
 # run this target, to compile executable for testing
 add_custom_target(ready_for_tests
 	DEPENDS ${ARC_CACHE_TEST_EXE} ${OPTIMAL_CACHE_TEST_EXE}
 )
 
 # get directory with all tests
-set(GLOBAL_TEST_DIR  ${CMAKE_SOURCE_DIR}/../tests)
+set(GLOBAL_TEST_ANSWER_DIR  ${CMAKE_SOURCE_DIR}/../tests/ans)
 
-set(ARC_TEST_DIR     ${GLOBAL_TEST_DIR}/arc    )
-set(OPTIMAL_TEST_DIR ${GLOBAL_TEST_DIR}/optimal)
+set(ARC_TEST_ANSWER_DIR     ${GLOBAL_TEST_ANSWER_DIR}/arc    )
+set(OPTIMAL_TEST_ANSWER_DIR ${GLOBAL_TEST_ANSWER_DIR}/optimal)
 
-add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_DIR}    ) # testing arc     cache
-add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPTIMAL_TEST_DIR}) # testing optimal cache
+add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_ANSWER_DIR}    ) # testing arc     cache
+add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPTIMAL_TEST_ANSWER_DIR}) # testing optimal cache
+
+# =============================================================================================================
