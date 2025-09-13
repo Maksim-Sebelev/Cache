@@ -7,6 +7,9 @@
 [make](https://www.gnu.org/software/make/ "ссылка на оффициальный сайт make") \
 [cmake](https://cmake.org/ "с\сылка на официальный сайт cmake")
 
+## Объяснение алгоритма ARC(Adaptive replacement cache):
+https://miro.com/app/board/uXjVJIsDL80=/?focusWidget=3458764640319423359 \
+UPD: Грязные капиталюги не дали сделать pdf/хорошего качество фото 
 
 ## Установка:
 ```bash
