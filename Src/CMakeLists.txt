@@ -32,12 +32,6 @@ function(add_release_and_debug_options_to_executable executable)
 		-fsanitize=returns-nonnull-attribute
 		-fsanitize=shift
 		-fsanitize=signed-integer-overflow
-		# fsanitize=address,alignment,bool
-		# fsanitize=bounds,enum,float-cast-overflow
-		# fsanitize=undefined,unreachable,vla-bound,vptr
-		# fsanitize=float-divide-by-zero,integer-divide-by-zero
-		# fsanitize=leak,nonnull-attribute,null,object-size,return
-		# fsanitize=returns-nonnull-attribute,shift,signed-integer-overflow
 	)
 
 	set(DEBUG_FLAGS
