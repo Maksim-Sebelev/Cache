@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 project(Cache
 	LANGUAGES CXX
@@ -225,27 +225,16 @@ include(CTest)
 
 
 # function for adding tests to some executable files
-function(add_testing test_executable ans_dir)
+function(add_testing test_executable test_dir ans_dir)
 
-	if (NOT EXISTS ${ans_dir})
-		message(WARNING "Answer directiry not found: ${ans_dir}")
-	endif()
-
-	set(TEST_DIR ${CMAKE_SOURCE_DIR}/../tests/dat)
-
-	if(NOT EXISTS ${TEST_DIR})
-		message(WARNING "Test directory not found: ${TEST_DIR}")
-		return()
-	endif()
-
-	file(GLOB test_files "${TEST_DIR}/*.dat") # save all tests -files in variable 'test_files'
+	file(GLOB test_files "${test_dir}/*.dat") # save all tests -files in variable 'test_files'
 
 	# get quantity of tests
 	list(LENGTH test_files num_tests)
 
 	# check that at least 1 test was found
 	if(${num_tests} EQUAL 0)
-		message(WARNING "No .dat files found in ${TEST_DIR}")
+		message(WARNING "No .dat files found in ${test_dir}")
 		return()
 	endif()
 
@@ -253,13 +242,11 @@ function(add_testing test_executable ans_dir)
 	foreach(test_file ${test_files})
 
 		# get name of answer file
-		get_filename_component(test_file_name      "${test_file}" NAME_WE)   # NAME_WE = без расширения
-		get_filename_component(test_file_directory "${test_file}" DIRECTORY) # DIRECTTORY = только путь, без файла
+		get_filename_component(test_file_name "${test_file}" NAME_WE)   # NAME_WE = без расширения
 		set(answer_file "${ans_dir}/${test_file_name}.ans")
 
 		# create test_name
-		get_filename_component(test_num "${test_file}" NAME_WE)
-		set(test_name ${test_executable}_${test_num})
+		set(test_name ${test_executable}_${test_file_name})
 
 		# add test
 		add_test(
@@ -282,12 +269,16 @@ add_custom_target(ready_for_tests
 )
 
 # get directory with all tests
-set(GLOBAL_TEST_ANSWER_DIR  ${CMAKE_SOURCE_DIR}/../tests/ans)
 
-set(ARC_TEST_ANSWER_DIR     ${GLOBAL_TEST_ANSWER_DIR}/arc    )
+set(ARC_TEST_DIR   ${CMAKE_SOURCE_DIR}/../tests/arc/dat)
+set(ARC_ANSWER_DIR ${CMAKE_SOURCE_DIR}/../tests/arc/ans)
+
+set(OPT_TEST_DIR   ${CMAKE_SOURCE_DIR}/../tests/optimal/dat)
+set(OPT_ANSWER_DIR ${CMAKE_SOURCE_DIR}/../tests/optimal/ans)
+
 set(OPTIMAL_TEST_ANSWER_DIR ${GLOBAL_TEST_ANSWER_DIR}/optimal)
 
-add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_ANSWER_DIR}    ) # testing arc     cache
-add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPTIMAL_TEST_ANSWER_DIR}) # testing optimal cache
+add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_DIR} ${ARC_ANSWER_DIR}) # testing arc     cache
+add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPT_TEST_DIR} ${OPT_ANSWER_DIR}) # testing optimal cache
 
 # =============================================================================================================
