@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <deque>
 #include <vector>
+#include <iostream>
 
 
 template <typename key_t, typename item_t>
@@ -41,26 +42,32 @@ public:
 
     } */
 
+
     void run_optimal_cache()
     {
+        if (capacity_ == 0) return;
+        
         for (std::size_t i = 0; i < items_.size(); i++)
         {
             key_t  curr_key  = items_[i].first;
             item_t curr_item = items_[i].second;
+ 
+            if (!map_future_[curr_key].empty())
+                map_future_[curr_key].pop_front();
 
             if (cache_map_.find(curr_key) != cache_map_.end())
-            { 
                 hits_counter_++;
-            }
 
             else if (cache_map_.size() < capacity_)
-                    cache_map_[curr_key] = curr_item;
-            else    
+                cache_map_[curr_key] = curr_item;
+
+	        else    
             {
                 remove_farest();
                 cache_map_[curr_key] = curr_item;
-            }
+	        }
         }
+        std::cout << std::endl;
     }
 
     std::size_t get_hit_count() const
@@ -76,28 +83,30 @@ public:
 private:
     void remove_farest()
     {
-        index_t farthest_next_id = -1;
-        key_t   farthest_key  = -1;
+        index_t farthest_next_index = 0;
+        key_t   farthest_key  = 0;
 
         for (const auto &pair : cache_map_)
         {
             key_t key_in_cache = pair.first;
-            index_t closest_index = map_future_[key_in_cache].front();
             
             if (map_future_[key_in_cache].empty())
             {
                 farthest_key = key_in_cache;
                 break;
             }
-            else if (closest_index > farthest_next_id)
+            else 
             {
-                farthest_next_id = closest_index;
-                farthest_key  = key_in_cache;
+                index_t next_index = map_future_[key_in_cache].front();
+                if (next_index > farthest_next_index)
+                {
+                        farthest_next_index = next_index;
+                        farthest_key        = key_in_cache;
+                }
             }
         }
-
-        cache_map_.erase(farthest_key);
-      //  map_future[farthest_key].pop_front();
+        if (farthest_key != 0)
+            cache_map_.erase(farthest_key);
     }
 
     void load_map_of_future()
@@ -105,7 +114,7 @@ private:
         for (index_t i = 0; i < items_.size(); i++)
         {
             key_t key = items_[i].first;
-            map_future_[key].push_back(i);        
+            map_future_[key].push_back(i + 1);        
         }
     }
 };

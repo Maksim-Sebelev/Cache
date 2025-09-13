@@ -1,3 +1,6 @@
+#ifndef OPTIMAL_CACHE_HPP
+#define OPTIMAL_CACHE_HPP
+
 #include <unordered_map>
 #include <deque>
 #include <vector>
@@ -44,11 +47,10 @@ public:
         {
             key_t  curr_key  = items_[i].first;
             item_t curr_item = items_[i].second;
+            hits_counter_ = 0;
 
             if (cache_map_.find(curr_key) != cache_map_.end())
-            { 
-                hits_counter_++;
-            }
+                hits_counter_ = 0;
 
             else if (cache_map_.size() < capacity_)
                     cache_map_[curr_key] = curr_item;
@@ -62,7 +64,7 @@ public:
 
     std::size_t get_hit_count() const
     {
-        return hits_counter_;
+        return hits_counter_ - 1;
     }
 
     ~OPT_cache() 
@@ -73,30 +75,32 @@ public:
 private:
     void remove_farest()
     {
-        index_t farthest_next_id = -1;
+        index_t farthest_next_index = -1;
         key_t   farthest_key  = -1;
 
         for (const auto &pair : cache_map_)
         {
             key_t key_in_cache = pair.first;
-            index_t closest_index = map_future_[key_in_cache].front();
+            index_t next_index = map_future_[key_in_cache].front();
             
             if (map_future_[key_in_cache].empty())
             {
                 farthest_key = key_in_cache;
                 break;
             }
-            else if (closest_index > farthest_next_id)
+            else if (next_index > farthest_next_index)
             {
-                farthest_next_id = closest_index;
+                farthest_next_index = next_index;
                 farthest_key  = key_in_cache;
             }
         }
 
-        cache_map_.erase(farthest_key);
-      //  map_future[farthest_key].pop_front();
+        if (farthest_key != -1)
+        {
+            cache_map_.erase(farthest_key);
+            map_future_[farthest_key].pop_front();
+        }
     }
-
     void load_map_of_future()
     {
         for (index_t i = 0; i < items_.size(); i++)
@@ -106,3 +110,5 @@ private:
         }
     }
 };
+
+#endif
