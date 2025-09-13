@@ -19,13 +19,6 @@
 │   │       ├── read_test.hpp
 │   │       └── test_files.hpp
 │   └── src
-│       ├── cache
-│       │   ├── arc
-│       │   │   ├── arc_cache.cpp
-│       │   │   └── arc_main.cpp
-│       │   └── optimal
-│       │       ├── optimal_cache.cpp
-│       │       └── optimal_main.cpp
 │       └── test
 │           ├── arc_cache_test.cpp
 │           ├── check_args.cpp
@@ -73,4 +66,4 @@
             ├── 9.ans
             └── 9.dat
 
-21 directories, 53 files
+18 directories, 49 files
