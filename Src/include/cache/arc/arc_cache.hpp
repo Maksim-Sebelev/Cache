@@ -23,11 +23,11 @@ private:
 
     struct CacheEntry
     {
-        key_t key;
-        item_t item;
+        key_t key_;
+        item_t item_;
 
-        CacheEntry() : key(), item() {}
-        CacheEntry(const key_t &k, const item_t &i) : key(k), item(i) {}
+        CacheEntry() : key_(), item_() {}
+        CacheEntry(const key_t &k, const item_t &i) : key_(k), item_(i) {}
     };
 
     using ListType = typename std::list<CacheEntry>;
@@ -132,7 +132,7 @@ private:
         list_first.pop_back();
 
         list_first_ghost.push_front(tail_element);
-        update_hashmap(tail_element.key, ListLocation::FIRST_LIST_GHOST, list_first_ghost.begin());
+        update_hashmap(tail_element.key_, ListLocation::FIRST_LIST_GHOST, list_first_ghost.begin());
     }
 
     inline void replace_frequent_and_ghost()
@@ -143,7 +143,7 @@ private:
         list_frequent.pop_back();
 
         list_frequent_ghost.push_front(tail_element);
-        update_hashmap(tail_element.key, ListLocation::FREQUENT_LIST_GHOST, list_frequent_ghost.begin());
+        update_hashmap(tail_element.key_, ListLocation::FREQUENT_LIST_GHOST, list_frequent_ghost.begin());
     }
 
     void replace_for_adapt()
@@ -220,7 +220,7 @@ private:
             {
                 if (!list_first_ghost.empty())
                 {
-                    hashmap.erase(list_first_ghost.back().key);
+                    hashmap.erase(list_first_ghost.back().key_);
                     list_first_ghost.pop_back();
                 }
                 replace_for_adapt();
@@ -229,7 +229,7 @@ private:
             {
                 if (!hashmap.empty())
                 {
-                    hashmap.erase(list_first.back().key);
+                    hashmap.erase(list_first.back().key_);
                     list_first.pop_back();
                 }
             }
@@ -240,7 +240,7 @@ private:
             { 
                 if (!list_frequent_ghost.empty())
                 {    
-                    hashmap.erase(list_frequent_ghost.back().key);
+                    hashmap.erase(list_frequent_ghost.back().key_);
                     list_frequent_ghost.pop_back();       
                 }
             }
@@ -272,10 +272,10 @@ private:
             
             if (list_it != ListIter())
             {
-                std::cout << " item: " << list_it->item;
-                std::cout << " key by cache info: " << list_it->key; 
+                std::cout << " item: " << list_it->item_;
+                std::cout << " key by cache info: " << list_it->key_; 
             }
-            else 
+            else
                 std::cout << " INVALID ITERATOR";
 
             std::cout << std::endl;
@@ -318,8 +318,8 @@ private:
         std::size_t size = list.size();
         for (const auto &cache : list) // pair => list.begin() == ListIter
         {
-            item_t item = cache.item;
-            key_t  key  = cache.key;
+            item_t item = cache.item_;
+            key_t  key  = cache.key_;
 
             std::cout << "[ item" << i++ <<" = " << item <<"(hashmap key: " << key <<  ") ]";
             if (i < size) std::cout << "<==>";
@@ -346,14 +346,14 @@ public:
         
             if (hashmap_it == hashmap.end()) return item_t();
 
-        return hashmap_it->second.list_iter->item;
+        return hashmap_it->second.list_iter->item_;
     }
 
     bool add_cache(const key_t &key, const item_t &item)
     {
         if (capacity == 0) return false;
         
-        HashmapIter hashmap_it = hashmap.find(key); 
+        HashmapIter hashmap_it = hashmap.find(key);
 
         if (hashmap_it != hashmap.end()) 
             return handle_existing_item(hashmap_it, key);

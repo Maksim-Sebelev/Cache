@@ -50,11 +50,12 @@ function(add_release_and_debug_options_to_executable executable)
 		-fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer -Wstack-usage=8192
 		-Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel
 		-Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types
-		-Wsuggest-override -Wswitch-default -Wsync-nand -Wundef -Wunreachable-code -Wunused
+		-Wsuggest-override -Wsync-nand -Wundef -Wunreachable-code -Wunused
 		-Wuseless-cast -Wvariadic-macros -Wno-literal-suffix -Wno-missing-field-initializers -Wno-narrowing
 		-Wno-old-style-cast -Wno-varargs -Wstack-protector -fcheck-new -fsized-deallocation -fstack-protector
 		-pie -fPIE -Werror=vla
 		# -Weffc++
+		# -Wswitch-default
 	)
 
 	target_compile_options(${executable} PRIVATE
@@ -86,75 +87,12 @@ endfunction(add_release_and_debug_options_to_executable)
 # name - 'arc_cache'
 # for reak work with our cache
 
-set(ARC_CACHE_SRC_DIR ${PROJECT_SOURCE_DIR}/src/cache/arc    )
 set(ARC_CACHE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache/arc)
-set(ARC_CACHE_EXE     arc_cache                              )
-
-set(ARC_CACHE_SRC
-	${ARC_CACHE_SRC_DIR}/arc_cache.cpp
-	${ARC_CACHE_SRC_DIR}/arc_main.cpp
-)
-
-add_executable(${ARC_CACHE_EXE} ${ARC_CACHE_SRC})
-
-target_include_directories(${ARC_CACHE_EXE} PRIVATE
-		${ARC_CACHE_INC_DIR}
-)
-
-add_release_and_debug_options_to_executable(${ARC_CACHE_EXE})
-
-# =============================================================================================================
-
-# creating executable file of optimal cache (belady)
-# name - 'optimal_cache'
-
-set(OPTIMAL_CACHE_SRC_DIR ${PROJECT_SOURCE_DIR}/src/cache/optimal    )
 set(OPTIMAL_CACHE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache/optimal)
-set(OPTIMAL_CACHE_EXE     optimal_cache								 )
-
-set(OPTIMAL_CACHE_SRC
-	${OPTIMAL_CACHE_SRC_DIR}/optimal_cache.cpp
-	${OPTIMAL_CACHE_SRC_DIR}/optimal_main.cpp
-)
-
-add_executable(${OPTIMAL_CACHE_EXE}
-				EXCLUDE_FROM_ALL	
-			   ${OPTIMAL_CACHE_SRC}
-)
-
-target_include_directories(${OPTIMAL_CACHE_EXE}
-	PRIVATE
-		${OPTIMAL_CACHE_INC_DIR}
-)
-
-add_release_and_debug_options_to_executable(${OPTIMAL_CACHE_EXE})
 
 # =============================================================================================================
-# add targets
-# 'run', 'rebuild'
-# 'run_optimlal', 'rebuild_optimal'
-
-set(EXE_TARGET     ${ARC_CACHE_EXE}) # useless, just for same code style
-set(RUN_TARGET     run         )
-set(CLEAN_TARGET   clean       ) # defaulted generate. this needed only for same code style
-set(REBUILD_TARGET rebuild     )
-
-add_custom_target(${RUN_TARGET}
-    COMMAND $<TARGET_FILE:${EXE_TARGET}>
-	DEPENDS ${EXE_TARGET}
-	COMMENT "Running executable: $<TARGET_FILE:${ARC_CACHE_EXE}>"
-)
-
-add_custom_target(${REBUILD_TARGET}
-	COMMAND make clean
-    COMMAND make
-	COMMENT "Rebuilding project"
-)
-
-# =============================================================================================================
-
-# creating test for arc_cache executable
-# name of executable file - 'cache_test'
+# creating test for arc_cache
+# name of executable file - 'arc_cache_test'
 # needed for testing of our cache
 # for test didn`t need the main executable
 # we are compiling the cache function
@@ -170,9 +108,6 @@ set(ARC_CACHE_TEST_SRC
 	# cache test files
 	${ARC_CACHE_TEST_SRC_DIR}/arc_cache_test.cpp
 	${ARC_CACHE_TEST_SRC_DIR}/check_args.cpp
-
-	# cache function
-	${ARC_CACHE_SRC_DIR}/arc_cache.cpp
 )
 
 add_executable(${ARC_CACHE_TEST_EXE} 
@@ -199,9 +134,6 @@ set(OPTIMAL_CACHE_TEST_SRC
 	# cache test files
 	${OPTIMAL_CACHE_TEST_SRC_DIR}/optimal_cache_test.cpp
 	${OPTIMAL_CACHE_TEST_SRC_DIR}/check_args.cpp
-
-	# cache function
-	${OPTIMAL_CACHE_SRC_DIR}/optimal_cache.cpp
 )
 
 add_executable(${OPTIMAL_CACHE_TEST_EXE} 
