@@ -81,7 +81,7 @@ endfunction(add_release_and_debug_options_to_executable)
 # name - 'arc_cache'
 # for reak work with our cache
 
-set(ARC_CACHE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache/arc)
+set(ARC_CACHE_INC_DIR     ${PROJECT_SOURCE_DIR}/include/cache/arc    )
 set(OPTIMAL_CACHE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache/optimal)
 
 # =============================================================================================================
@@ -94,14 +94,12 @@ set(OPTIMAL_CACHE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache/optimal)
 
 
 # arc 
-set(ARC_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test    )
-set(ARC_CACHE_TEST_INC_DIR ${PROJECT_SOURCE_DIR}/include/test)
-set(ARC_CACHE_TEST_EXE     arc_cache_test                    )
+set(ARC_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test)
+set(ARC_CACHE_TEST_EXE     arc_cache_test                )
 
 set(ARC_CACHE_TEST_SRC
 	# cache test files
 	${ARC_CACHE_TEST_SRC_DIR}/arc_cache_test.cpp
-	${ARC_CACHE_TEST_SRC_DIR}/check_args.cpp
 )
 
 add_executable(${ARC_CACHE_TEST_EXE} 
@@ -110,23 +108,20 @@ add_executable(${ARC_CACHE_TEST_EXE}
 
 target_include_directories(${ARC_CACHE_TEST_EXE}
 	PRIVATE
-		${ARC_CACHE_TEST_INC_DIR}
 		${ARC_CACHE_INC_DIR}
 )
 
 
 add_release_and_debug_options_to_executable(${ARC_CACHE_TEST_EXE})
 
-# ==========
+# =============================================================================================================
 # optimal
-set(OPTIMAL_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test    )
-set(OPTIMAL_CACHE_TEST_INC_DIR ${PROJECT_SOURCE_DIR}/include/test)
-set(OPTIMAL_CACHE_TEST_EXE     optimal_cache_test                )
+set(OPTIMAL_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test)
+set(OPTIMAL_CACHE_TEST_EXE     optimal_cache_test            )
 
 set(OPTIMAL_CACHE_TEST_SRC
 	# cache test files
 	${OPTIMAL_CACHE_TEST_SRC_DIR}/optimal_cache_test.cpp
-	${OPTIMAL_CACHE_TEST_SRC_DIR}/check_args.cpp
 )
 
 add_executable(${OPTIMAL_CACHE_TEST_EXE} 
@@ -135,68 +130,9 @@ add_executable(${OPTIMAL_CACHE_TEST_EXE}
 
 target_include_directories(${OPTIMAL_CACHE_TEST_EXE}
 	PRIVATE
-		${OPTIMAL_CACHE_TEST_INC_DIR}
 		${OPTIMAL_CACHE_INC_DIR}
 )
 
 add_release_and_debug_options_to_executable(${OPTIMAL_CACHE_TEST_EXE})
-
-# =============================================================================================================
-# creating tests
-
-enable_testing()
-include(CTest)
-
-
-# function for adding tests to some executable files
-function(add_testing test_executable test_dir ans_dir)
-
-	file(GLOB test_files "${test_dir}/*.dat") # save all tests -files in variable 'test_files'
-
-	# get quantity of tests
-	list(LENGTH test_files num_tests)
-
-	# check that at least 1 test was found
-	if(${num_tests} EQUAL 0)
-		message(WARNING "No .dat files found in ${test_dir}")
-		return()
-	endif()
-
-	# add tests
-	foreach(test_file ${test_files})
-
-		# get name of answer file
-		get_filename_component(test_file_name "${test_file}" NAME_WE)   # NAME_WE = без расширения
-		set(answer_file "${ans_dir}/${test_file_name}.ans")
-
-		# create test_name
-		set(test_name ${test_executable}_${test_file_name})
-
-		# add test
-		add_test(
-			NAME ${test_name}
-			# execute test
-			COMMAND ./${test_executable} ${test_file} ${answer_file}
-
-			# working directory - dircetory with executable file
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		)
-
-	endforeach()
-
-endfunction(add_testing)
-
-# get directory with all tests
-
-set(ARC_TEST_DIR   ${CMAKE_SOURCE_DIR}/../tests/arc/dat)
-set(ARC_ANSWER_DIR ${CMAKE_SOURCE_DIR}/../tests/arc/ans)
-
-set(OPT_TEST_DIR   ${CMAKE_SOURCE_DIR}/../tests/optimal/dat)
-set(OPT_ANSWER_DIR ${CMAKE_SOURCE_DIR}/../tests/optimal/ans)
-
-set(OPTIMAL_TEST_ANSWER_DIR ${GLOBAL_TEST_ANSWER_DIR}/optimal)
-
-add_testing(${ARC_CACHE_TEST_EXE}      ${ARC_TEST_DIR} ${ARC_ANSWER_DIR}) # testing arc     cache
-add_testing(${OPTIMAL_CACHE_TEST_EXE}  ${OPT_TEST_DIR} ${OPT_ANSWER_DIR}) # testing optimal cache
 
 # =============================================================================================================

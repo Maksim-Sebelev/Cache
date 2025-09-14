@@ -2,14 +2,10 @@
 ## Авторы: Лобачев Артем, Себелев Максим
 
 ## Зависимости:
-У проекта *нет обязательныз зависимостей*, но для удобной работы могут понадобиться:\
+У проекта **нет обязательных зависимостей**, но для удобной работы могут понадобиться:\
 [git](https://git-scm.com/ "ссылка на официальный сайт git")\
 [make](https://www.gnu.org/software/make/ "ссылка на оффициальный сайт make") \
 [cmake](https://cmake.org/ "с\сылка на официальный сайт cmake")
-
-## Объяснение алгоритма ARC(Adaptive replacement cache):
-https://miro.com/app/board/uXjVJIsDL80=/?focusWidget=3458764640319423359 \
-UPD: Грязные капиталюги не дали сделать pdf/фото хорошего качество
 
 ## Установка:
 ```bash
@@ -27,125 +23,47 @@ cmake -S ../Src -DCMAKE_BUILD_TYPE=Release # или =Debug для дебажно
 ```bash
 make
 ```
+## Как проводить тесты?
 
-# Тестирование
-
-## запуск тестов:
+Для начала скомпилируйте проект.\
+Тестовые данные поступают на вход с `stdin`, а выходные данные в `stdout`.\
+Тестирование для arc:
 ```bash
-make test 
+./build/arc_cache_test < <your_test_file>.dat # результат в stdout
 ```
-или для более подробной информации:
+
+Тестирование для optimal:
 ```bash
-ctest --verbose
+./build/optimal_cache_test < <your_test_file>.dat # результат в stdout
 ```
 
 # Структура проекта
 ```txt
-.
-├── build # рабочая директория (создается Вами)
-│   └── <some files created with cmake>
-├── README.md
-├── .gitignore
+..
 ├── assets
 │   └── weffc++.png
 ├── project_struct
 │   └── project_struct.txt
-│
-├── Src
-│   ├── CMakeLists.txt
-│   ├── include
-│   │   ├── cache
-│   │   │   ├── arc
-│   │   │   │   └── arc_cache.hpp
-│   │   │   └── optimal
-│   │   │       └── optimal_cache.hpp
-│   │   └── test
-│   │       ├── check_args.hpp
-│   │       ├── read_answer.hpp
-│   │       ├── read_test_and_answer.hpp
-│   │       ├── read_test.hpp
-│   │       └── test_files.hpp
-│   └── src
-│       └── test
-│           ├── arc_cache_test.cpp
-│           ├── check_args.cpp
-│           └── optimal_cache_test.cpp
-└── tests
-    ├── arc
-    │   ├── ans
-    │   │   ├── 1.ans
-    │   │   ├── 2.ans
-    │   │   ├── 3.ans
-    │   │   ├── 4.ans
-    │   │   ├── 5.ans
-    │   │   ├── 6.ans
-    │   │   ├── 7.ans
-    │   │   └── 8.ans
-    │   └── dat
-    │       ├── 1.dat
-    │       ├── 2.dat
-    │       ├── 3.dat
-    │       ├── 4.dat
-    │       ├── 5.dat
-    │       ├── 6.dat
-    │       ├── 7.dat
-    │       └── 8.dat
-    └── optimal
-        ├── ans
-        │   ├── 1.ans
-        │   ├── 2.ans
-        │   ├── 3.ans
-        │   ├── 4.ans
-        │   ├── 5.ans
-        │   ├── 6.ans
-        │   ├── 7.ans
-        │   ├── 8.ans
-        │   └── 9.ans
-        └── dat
-            ├── 1.dat
-            ├── 2.dat
-            ├── 3.dat
-            ├── 4.dat
-            ├── 5.dat
-            ├── 6.dat
-            ├── 7.dat
-            ├── 8.dat
-            ├── 9.ans
-            └── 9.dat
+├── README.md
+└── Src
+    ├── CMakeLists.txt
+    ├── include
+    │   └── cache
+    │       ├── arc
+    │       │   └── arc_cache.hpp
+    │       └── optimal
+    │           └── optimal_cache.hpp
+    └── src
+        └── test
+            ├── arc_cache_test.cpp
+            └── optimal_cache_test.cpp
 
-18 directories, 49 files
+10 directories, 8 files
 ```
 
-## Как добавить тесты?
-Тестирование происходит сразу для двух алгоритмов - arc и belady. \
-Вот так на момент написани README.md выглядит структура папки tests:
-```text
-tests
-    ├── ans
-    │   ├── arc       # ответы для arc cache
-    │   │   ├── 1.ans
-    │   │   ├── 2.ans
-    │   │   └── 3.ans
-    │   └── optimal   # ответы для optimal cache
-    │       ├── 1.ans
-    │       ├── 2.ans
-    │       └── 3.ans
-    └── dat           # общие тестовые данные
-        ├── 1.dat
-        ├── 2.dat
-        └── 3.dat
-```
-Положим `.` корневой папкой проекта.
-Если Вы хотите добавить тесты для `arc cache`, то добавьте в папку `./tests/dat/` файлы с соответсвующим содержимым и названиями `<n>.dat`.
-Для каждого вашего теста добавьте в папку `./tests/ans/arc/` соотвествующий файл с тем же названием, что и его тестовый файл `<n>.ans`.\
-Аналогично для `optimal cache`.\
-**Обратите внимание**, что тестовые данные одинаковы для обоих кешей.\
-После просто выполните
-```bash
-cmake -S ../Src -DCMAKE_BUILD_TYPE=Release
-make test # или 'ctest --verbose' для более подробной информации о тестах
-```
-из папки `./build`. Ваши тесты будут включеные в тестирование и Вы увидете всю необходимую информацию о ваших тестах.
+## Объяснение алгоритма ARC(Adaptive replacement cache):
+https://miro.com/app/board/uXjVJIsDL80=/?focusWidget=3458764640319423359 \
+UPD: Грязные капиталюги не дали сделать pdf/фото хорошего качество
 
 ## Что реализовано в проекте?
 В проекте реализован алгоритм кеширования ARC, и так же алгоритм идеального кеширования Belady. Второй нужен для оценки того, насколько близок ARC к теоретическому идеалу. Авторы не успели реализовать сравнение, поэтому увы, красивых графиков и даже одинаковых тестов для оценки разницы не будет. Понимаем, что это было важной частью задания, но увы данной фичи в проекте нет.
