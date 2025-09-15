@@ -24,8 +24,8 @@ int main()
         input_key_item[i] = {key, item};
     }
 
-    OPT_cache<int, int> optimal_cache(capacity, amount_of_items, input_key_item);
-    optimal_cache.run_optimal_cache();
+    OPT_cache<int, int> optimal_cache(capacity, amount_of_items);
+    optimal_cache.run_optimal_cache(input_key_item);
 
     size_t hits_counter = optimal_cache.get_hit_count();
     
