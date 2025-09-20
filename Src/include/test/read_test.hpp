@@ -46,13 +46,12 @@ struct test_input_t
         void          read_input_size_from_stdin                        ();
         void          read_test_data_from_stdin                         ();
 
-
         __attribute__ ((noreturn))
         void          failed_read_cache_size_from_stdin                 ();
         __attribute__ ((noreturn))
-        void          negative_or_to_big_cache_size_from_stdin          ();
+        void          negative_or_too_big_cache_size_from_stdin         ();
         __attribute__ ((noreturn))
-        void          negative_or_to_big_input_size_from_stdin          ();
+        void          negative_or_too_big_input_size_from_stdin         ();
         __attribute__ ((noreturn))
         void          failed_read_input_size_from_stdin                 ();
         __attribute__ ((noreturn))
@@ -76,9 +75,9 @@ struct test_input_t
         __attribute__ ((noreturn))
         void          failed_read_cache_size_from_dat                   ();
         __attribute__ ((noreturn))
-        void          negative_or_to_big_cache_size_in_dat              ();
+        void          negative_or_too_big_cache_size_from_dat           ();
         __attribute__ ((noreturn))
-        void          negative_or_to_big_input_size_from_dat            ();
+        void          negative_or_too_big_input_size_from_dat           ();
         __attribute__ ((noreturn))
         void          failed_read_input_size_from_dat                   ();
         __attribute__ ((noreturn))
@@ -208,7 +207,7 @@ void test_input_t<input_t>::read_cache_size_from_stdin()
     std::cin >> signed_cache_size_;
 
     if (signed_cache_size_ < 0)
-        negative_or_to_big_cache_size_in_stdin();
+        negative_or_too_big_cache_size_from_stdin();
 
     if (std::cin.fail())
         failed_read_cache_size_from_stdin(); // exit 1
@@ -232,7 +231,7 @@ void test_input_t<input_t>::read_input_size_from_stdin()
     std::cin >> signed_input_size_;
 
     if (signed_input_size_ < 0)
-        negative_or_to_big_input_size_from_stdin();
+        negative_or_too_big_input_size_from_stdin();
 
     if (std::cin.fail())
         failed_read_input_size_from_stdin(); // exit 1
@@ -264,7 +263,7 @@ void test_input_t<input_t>::read_test_data_from_stdin()
 
 template <typename input_t>
 __attribute__ ((noreturn))
-void test_input_t<input_t>::negative_or_to_big_cache_size_from_stdin()
+void test_input_t<input_t>::negative_or_too_big_cache_size_from_stdin()
 {
     std::cerr << "Cache size is negative or too big. We can`t parse it." << std::endl
     << "failed read cache size from stdin." << std::endl;
@@ -287,7 +286,7 @@ void test_input_t<input_t>::failed_read_cache_size_from_stdin()
 
 template <typename input_t>
 __attribute__ ((noreturn))
-void test_input_t<input_t>::negative_or_to_big_input_size_from_stdin()
+void test_input_t<input_t>::negative_or_too_big_input_size_from_stdin()
 {
     std::cerr << "Input size is negative or too big. We can`t parse it." << std::endl
     << "failed read input size from stdin." << std::endl;
@@ -361,7 +360,7 @@ void test_input_t<input_t>::read_cache_size_from_dat()
     file_ >> signed_cache_size_;
 
     if (signed_cache_size_ < 0)
-        negative_or_to_big_cache_size_in_dat();
+        negative_or_too_big_cache_size_from_dat();
 
     if (file_.fail())
         failed_read_cache_size_from_dat(); // exit 1
@@ -386,7 +385,7 @@ void test_input_t<input_t>::read_input_size_from_dat()
     file_ >> signed_input_size_;
 
     if (signed_input_size_ < 0)
-        negative_or_to_big_input_size_from_dat();
+        negative_or_too_big_input_size_from_dat();
 
     if (file_.fail())
         failed_read_input_size_from_dat(); // exit 1
@@ -442,7 +441,7 @@ void test_input_t<input_t>::failed_open_test_file()
 
 template <typename input_t>
 __attribute__ ((noreturn))
-void test_input_t<input_t>::negative_or_to_big_cache_size_in_dat()
+void test_input_t<input_t>::negative_or_too_big_cache_size_from_dat()
 {
     std::cerr << "Cache size is negative or too big. We can`t parse it." << std::endl
     << "failed read cache size from '" << test_file_ << "'" << std::endl;
@@ -466,7 +465,7 @@ void test_input_t<input_t>::failed_read_cache_size_from_dat()
 
 template <typename input_t>
 __attribute__ ((noreturn))
-void test_input_t<input_t>::negative_or_to_big_input_size_from_dat()
+void test_input_t<input_t>::negative_or_too_big_input_size_from_dat()
 {
     std::cerr << "Input size is negative or too big. We can`t parse it." << std::endl
     << "failed read input size from '" << test_file_ << "'" << std::endl;
