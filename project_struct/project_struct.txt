@@ -14,22 +14,18 @@
 │   │   │       └── optimal_cache.hpp
 │   │   └── test
 │   │       ├── check_args.hpp
+│   │       ├── input_stream.hpp
+│   │       ├── parse_args.hpp
 │   │       ├── read_answer.hpp
 │   │       ├── read_test_and_answer.hpp
 │   │       ├── read_test.hpp
 │   │       └── test_files.hpp
 │   └── src
-│       ├── cache
-│       │   ├── arc
-│       │   │   ├── arc_cache.cpp
-│       │   │   └── arc_main.cpp
-│       │   └── optimal
-│       │       ├── optimal_cache.cpp
-│       │       └── optimal_main.cpp
 │       └── test
 │           ├── arc_cache_test.cpp
 │           ├── check_args.cpp
-│           └── optimal_cache_test.cpp
+│           ├── optimal_cache_test.cpp
+│           └── parse_args.cpp
 └── tests
     ├── arc
     │   ├── ans
@@ -73,4 +69,4 @@
             ├── 9.ans
             └── 9.dat
 
-21 directories, 53 files
+18 directories, 52 files

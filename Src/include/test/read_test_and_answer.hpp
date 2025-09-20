@@ -29,7 +29,8 @@ struct test_data_t
     public:
         // public struct methods
         // ctor
-        test_data_t(const test_files_t& test_files);
+        test_data_t(const test_files_t& test_files); // ctor for not stdin input
+        test_data_t();                               // ctor for stdin input.
 
         ON_DEBUG(
         void dump();
@@ -49,8 +50,8 @@ template <typename input_t>
 void test_data_t<input_t>::dump()
 {
     std::cout << "ans        = " << get_test_answer() << std::endl;
-    std::cout << "cache size = " << get_cache_size() << std::endl;
-    std::cout << "input size = " << get_input_size() << std::endl;
+    std::cout << "cache size = " << get_cache_size () << std::endl;
+    std::cout << "input size = " << get_input_size () << std::endl;
 
     for (size_t i = 0; i < get_input_size(); i++)
         std::cout << "input[" << i << "] = " << get_i_element_of_data(i) << std::endl;
@@ -59,6 +60,15 @@ void test_data_t<input_t>::dump()
 
 //---------------------------------------------------------------------------------------------------------------
 
+// ctor for reading from stdin
+template <typename input_t>
+test_data_t<input_t>::test_data_t() :
+test_input_(), test_answer_() // no args ctor - for reading from stdin
+{}
+
+//---------------------------------------------------------------------------------------------------------------
+
+// ctor for reading from .dat and .ans files
 template <typename input_t>
 test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
 test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
