@@ -185,7 +185,7 @@ function(add_testing test_executable test_dir ans_dir)
 		add_test(
 			NAME ${test_name}
 			# execute test
-			COMMAND ./${test_executable} ${test_file} ${answer_file}
+			COMMAND ./${test_executable} --input_stream=files ${test_file} ${answer_file}
 
 			# working directory - dircetory with executable file
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}

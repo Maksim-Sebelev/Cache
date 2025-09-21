@@ -1,17 +1,23 @@
-#ifndef TEST_TEST_AND_ANSWER_HPP
-#define TEST_TEST_AND_ANSWER_HPP
+#ifndef TEST_GET_TEST_DATA_HPP
+#define TEST_GET_TEST_DATA_HPP
 
 //---------------------------------------------------------------------------------------------------------------
 
 #include <cstdlib>
+#include <cassert>
+#include <memory>
+
 #include "read_test.hpp"
 #include "read_answer.hpp"
 #include "test_files.hpp"
+#include "input_stream.hpp"
+#include "parse_args.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
 #ifdef _DEBUG
 #define ON_DEBUG(...) __VA_ARGS__
+#include <iostream>
 #else // _DEBUG
 #define ON_DEBUG(...)
 #endif // _DEBUG
@@ -28,18 +34,62 @@ struct test_data_t
 
     public:
         // public struct methods
-        // ctor
-        test_data_t(const test_files_t& test_files); // ctor for not stdin input
-        test_data_t();                               // ctor for stdin input.
+        // ctor`s
+        test_data_t();                               // ctor for stdin
+        test_data_t(const test_files_t& test_files); // ctor for files 
 
-        ON_DEBUG(
-        void dump();
-        )
         size_t  get_test_answer      ();
         size_t  get_cache_size       ();
         size_t  get_input_size       ();
         input_t get_i_element_of_data(size_t i);
+
+        ON_DEBUG(
+        void dump();
+        )
 };
+
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+// function to get test data
+// memory allocation needed because we 
+// don`t know how we become a test data:
+// from stdin or from files
+// !!! in README is more information about this
+
+template <typename input_t>
+std::unique_ptr<test_data_t<input_t>> get_test_data(int argc, char* argv[])
+{
+    flags_parser  parsing_flags_result(argc, argv);
+    input_stream  type_of_input_sream = parsing_flags_result.get_input_stream();
+
+    assert(type_of_input_sream != input_stream::invalid_input_stream);
+
+    std::unique_ptr<test_data_t<input_t>> test_data;
+
+    switch (type_of_input_sream)
+    {
+        case input_stream::standart_input:
+        {
+            test_data = std::make_unique<test_data_t<input_t>>();
+            break;
+        }
+
+        case input_stream::dat_file_stream:
+        {
+            test_files_t test_files = parsing_flags_result.get_test_files();
+            test_data = std::make_unique<test_data_t<input_t>>(test_files);
+            break;
+        }
+
+        case input_stream::invalid_input_stream:
+        default: assert(0 && "wtf?"); __builtin_unreachable();
+
+    }
+
+    return test_data;
+}
 
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
@@ -66,18 +116,18 @@ void test_data_t<input_t>::dump()
 
 //---------------------------------------------------------------------------------------------------------------
 
-// ctor for reading from stdin
+// ctor for reading from files
 template <typename input_t>
-test_data_t<input_t>::test_data_t() :
-test_input_(), test_answer_() // no args ctor - for reading from stdin
+test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
+test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
 {}
 
 //---------------------------------------------------------------------------------------------------------------
 
-// ctor for reading from .dat and .ans files
+// ctor for reading from stdin
 template <typename input_t>
-test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
-test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
+test_data_t<input_t>::test_data_t() :
+test_input_(), test_answer_()
 {}
 
 //---------------------------------------------------------------------------------------------------------------
@@ -114,4 +164,4 @@ input_t test_data_t<input_t>::get_i_element_of_data(size_t i)
 
 //---------------------------------------------------------------------------------------------------------------
 
-#endif // TEST_TEST_AND_ANSWER_HPP
+#endif // TEST_GET_TEST_DATA_HPP

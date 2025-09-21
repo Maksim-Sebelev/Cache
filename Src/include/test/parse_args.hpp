@@ -20,7 +20,7 @@ class flags_parser
 {
     public:
         // class public methods
-        input_sream   get_input_stream     ();
+        input_stream   get_input_stream     ();
         test_files_t  get_test_files       ();
 
         // ctor
@@ -29,7 +29,7 @@ class flags_parser
     private:
         
         // class private variables
-        input_sream  input_stream_;
+        input_stream  input_stream_;
         test_files_t test_files_  ;
 
         struct are_parametrs_already_defined
@@ -46,16 +46,17 @@ class flags_parser
         void define_answer_file ();
 
         static const struct option                       long_options            [];
-        static const std::pair<input_sream, std::string> input_stream_flag_values[];
+        static const std::pair<input_stream, std::string> input_stream_flag_values[];
 
         // class private methods
 
         void parse_flag_input_stream                         ();
+        __attribute__ ((noreturn))
         void parse_flag_help                                 ();
         void parse_not_a_flag                                (const char* argument); // maybe test file name, maybe invalid option
 
 
-        input_sream get_type_of_input_stream                 ();
+        input_stream get_type_of_input_stream                 ();
 
         std::string get_file_extension                       (const std::string& filename);
         bool        is_string_test_file_name  (const std::string& test_file);
@@ -92,11 +93,11 @@ const struct option flags_parser::long_options[] =
 
 //---------------------------------------------------------------------------------------------------------------
 
-const std::pair<input_sream, std::string> flags_parser::input_stream_flag_values[] =
+const std::pair<input_stream, std::string> flags_parser::input_stream_flag_values[] =
 {
-    {input_sream::standart_input      , "stdin"},
-    {input_sream::dat_file_stream     , "files"},
-    {input_sream::invalid_input_stream, ""      },
+    {input_stream::standart_input      , "stdin"},
+    {input_stream::dat_file_stream     , "files"},
+    {input_stream::invalid_input_stream, ""      },
 };
 
 //---------------------------------------------------------------------------------------------------------------
@@ -109,35 +110,29 @@ const std::pair<input_sream, std::string> flags_parser::input_stream_flag_values
 // ctor
 
 flags_parser::flags_parser(int argc, char* argv[]) :
-input_stream_                 (input_sream::standart_input), // default value of input_sream_
+input_stream_                 (input_stream::standart_input), // default value of input_stream_
 test_files_                   ("", "")                     , // we don`t know files before parsing args
 are_parametrs_already_defined_({false, false, false})        // nohing is defined before parsing args
 {
-    
-    printf("i = %d\nh = %d\n\n", 'i', 'h');
-    // int option_index = 0;
-
-    int options_iterator = 1; // int because argc, = 1 because argc >= 1
-
     for (int options_iterator = 1; options_iterator < argc; options_iterator++)
     {
-        int opt = getopt_long(argc, argv, "i:h", long_options, nullptr);
+        int option = getopt_long(argc, argv, "i:h", long_options, nullptr);
     
-        switch (opt)
+        switch (option)
         {
             case 'i': parse_flag_input_stream();                       break;
             case 'h': parse_flag_help        ();                       break;
             case -1 : parse_not_a_flag       (argv[options_iterator]); break;
+            default: assert(0 && "wtf?"); __builtin_unreachable();
         }
     }
-        // std::cout << "opt after = " << opt << std::endl;    
 }
 
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
 
-input_sream flags_parser::get_input_stream()
+input_stream flags_parser::get_input_stream()
 {
     return input_stream_;
 }
@@ -146,7 +141,7 @@ input_sream flags_parser::get_input_stream()
 
 test_files_t flags_parser::get_test_files()
 {
-    if (input_stream_ != input_sream::dat_file_stream)
+    if (input_stream_ != input_stream::dat_file_stream)
         try_to_get_test_files_when_input_stream_is_stdin(); // exit 1
     
     return test_files_;
@@ -163,7 +158,7 @@ void flags_parser::parse_flag_input_stream()
 {
     input_stream_ = get_type_of_input_stream();
 
-    if (input_stream_ == input_sream::invalid_input_stream)
+    if (input_stream_ == input_stream::invalid_input_stream)
         invalid_type_of_input_stream(); // exit 1
 
     define_input_stream();
@@ -200,6 +195,8 @@ void flags_parser::parse_not_a_flag(const char* argument)
 
 //---------------------------------------------------------------------------------------------------------------
 
+
+__attribute__ ((noreturn))
 void flags_parser::parse_flag_help()
 {
     std::cout <<
@@ -228,7 +225,7 @@ void flags_parser::parse_flag_help()
     "\n"
     "ATTENTION:\n"
     "You can`t choose a .dat and .ans file if your input stream is file\n"
-    "Default value of input sream is stdin\n"
+    "Default value of input stream is stdin\n"
     "(you can don`t indicate explicitly stdin), but if you need files - use -i=file\n"
     "You can`t choose more than 1 .dat and 1 .ans file\n"
     "You can`t choose input stream more 1 time\n"
@@ -255,7 +252,7 @@ void flags_parser::parse_flag_help()
 
 //---------------------------------------------------------------------------------------------------------------
 
-input_sream flags_parser::get_type_of_input_stream()
+input_stream flags_parser::get_type_of_input_stream()
 {
     assert(optarg);
 
@@ -265,7 +262,7 @@ input_sream flags_parser::get_type_of_input_stream()
             return input_stream_type.first;        
     }
 
-    return input_sream::invalid_input_stream;
+    return input_stream::invalid_input_stream;
 }
 
 //---------------------------------------------------------------------------------------------------------------

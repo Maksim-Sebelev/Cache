@@ -63,7 +63,7 @@ ctest --verbose
 │   │   └── test
 │   │       ├── check_args.hpp
 │   │       ├── read_answer.hpp
-│   │       ├── read_test_and_answer.hpp
+│   │       ├── get_test_data.hpp
 │   │       ├── read_test.hpp
 │   │       └── test_files.hpp
 │   └── src
