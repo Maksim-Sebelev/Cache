@@ -73,11 +73,11 @@ class flags_parser
         __attribute__ ((noreturn))
         void         redefine_answer_file                            ();
         __attribute__ ((noreturn))
-        void         undefined_option                                ();
-        __attribute__ ((noreturn))
         void         define_test_file_before_input_stream            ();
         __attribute__ ((noreturn))
         void         define_answer_file_before_input_stream          ();
+        __attribute__ ((noreturn))
+        void         undefined_option                                (const char* argument);
 };
 
 //---------------------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ void flags_parser::parse_not_a_flag(const char* argument)
         return;
     }
 
-    undefined_option(); // exit 1
+    undefined_option(argument); // exit 1
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -302,9 +302,9 @@ void flags_parser::invalid_type_of_input_stream()
 {
     assert(optarg);
 
-    std::cerr << "undefined type of input stream '" << optarg << "'."     << std::endl
-              << "Usage: '-input_stream=stdin' or '-input_stream=files'." << std::endl
-              << "For more information use option '--help' or '-h'."      << std::endl;
+    std::cerr << "undefined type of input stream '" << optarg << "'."       << std::endl
+              << "Usage: '--input_stream=stdin' or '--input_stream=files'." << std::endl
+              << "For more information use option '--help' or '-h'."        << std::endl;
 
     exit(EXIT_FAILURE);
 }
@@ -357,9 +357,10 @@ void flags_parser::redefine_answer_file()
 //---------------------------------------------------------------------------------------------------------------
 
 __attribute__ ((noreturn))
-void flags_parser::undefined_option()
+void flags_parser::undefined_option(const char* argument)
 {
-    std::cerr << "Undefined option '" << optarg << "'" << std::endl
+    assert(argument);
+    std::cerr << "Undefined option '" << argument << "'" << std::endl
               << "I don`t know, what i need to do :("  << std::endl;
 
     exit(EXIT_FAILURE);

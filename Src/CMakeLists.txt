@@ -69,26 +69,20 @@ function(add_release_and_debug_options_to_executable executable)
 endfunction(add_release_and_debug_options_to_executable)
 
 # =============================================================================================================
-# 	# add targets
-# # 'run', 'rebuild'
-# # 'run_optimlal', 'rebuild_optimal'
+# add targets
+# 'run', 'rebuild'
+# 'run_optimlal', 'rebuild_optimal'
 
-# set(EXE_TARGET     ${ARC_CACHE_EXE}) # useless, just for same code style
-# set(RUN_TARGET     run         )
-# set(CLEAN_TARGET   clean       ) # defaulted generate. this needed only for same code style
-# set(REBUILD_TARGET rebuild     )
+set(EXE_TARGET     ${ARC_CACHE_EXE}) # useless, just for same code style
+set(RUN_TARGET     run         )
+set(CLEAN_TARGET   clean       ) # defaulted generate. this needed only for same code style
+set(REBUILD_TARGET rebuild     )
 
-# add_custom_target(${RUN_TARGET}
-#     COMMAND $<TARGET_FILE:${EXE_TARGET}>
-# 	DEPENDS ${EXE_TARGET}
-# 	COMMENT "Running executable: $<TARGET_FILE:${ARC_CACHE_EXE}>"
-# )
-
-# add_custom_target(${REBUILD_TARGET}
-# 	COMMAND make clean
-#     COMMAND make
-# 	COMMENT "Rebuilding project"
-# )
+add_custom_target(${REBUILD_TARGET}
+	COMMAND make clean
+    COMMAND make
+	COMMENT "Rebuilding project"
+)
 
 # =============================================================================================================
 
@@ -110,7 +104,6 @@ set(ARC_CACHE_INC_DIR      ${PROJECT_SOURCE_DIR}/include/cache/arc) # here is de
 set(ARC_CACHE_TEST_SRC
 	# cache test files
 	${ARC_CACHE_TEST_SRC_DIR}/arc_cache_test.cpp
-	${ARC_CACHE_TEST_SRC_DIR}/check_args.cpp
 )
 
 add_executable(${ARC_CACHE_TEST_EXE} 
@@ -136,7 +129,6 @@ set(OPTIMAL_CACHE_INC_DIR     ${PROJECT_SOURCE_DIR}/include/cache/optimal) # her
 set(OPTIMAL_CACHE_TEST_SRC
 	# cache test files
 	${OPTIMAL_CACHE_TEST_SRC_DIR}/optimal_cache_test.cpp
-	${OPTIMAL_CACHE_TEST_SRC_DIR}/check_args.cpp
 )
 
 add_executable(${OPTIMAL_CACHE_TEST_EXE} 
