@@ -54,7 +54,7 @@ struct test_answer_t
 // in that case answer is in stdout
 
 test_answer_t::test_answer_t() :
-test_answer_(0), file_(nullptr), answer_file_(nullptr)
+test_answer_(0), file_(""), answer_file_("")
 {}
 
 //---------------------------------------------------------------------------------------------------------------

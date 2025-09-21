@@ -51,8 +51,8 @@ class flags_parser
         // class private methods
 
         void parse_flag_input_stream                         ();
-        void parse_not_a_flag                                (); // maybe test file name, maybe invalid option
         void parse_flag_help                                 ();
+        void parse_not_a_flag                                (const char* argument); // maybe test file name, maybe invalid option
 
 
         input_sream get_type_of_input_stream                 ();
@@ -87,7 +87,7 @@ const struct option flags_parser::long_options[] =
 {
     {"input_stream", required_argument, 0, 'i'},
     {"help"        , no_argument      , 0, 'h'},
-    {nullptr       , 0                , 0,  0 }, // just for safety
+    {""            , 0                , 0,  0 }, // just for safety
 };
 
 //---------------------------------------------------------------------------------------------------------------
@@ -117,16 +117,17 @@ are_parametrs_already_defined_({false, false, false})        // nohing is define
     printf("i = %d\nh = %d\n\n", 'i', 'h');
     // int option_index = 0;
 
-    int opt = 0;
+    int options_iterator = 1; // int because argc, = 1 because argc >= 1
 
-    while ((opt = getopt_long(argc, argv, "i:h", long_options, nullptr)) != -1)
+    for (int options_iterator = 1; options_iterator < argc; options_iterator++)
     {
-        std::cout << "opt = " << opt << std::endl;
+        int opt = getopt_long(argc, argv, "i:h", long_options, nullptr);
+    
         switch (opt)
         {
-            case 'i': std::cout << "1\n"; parse_flag_input_stream(); break;
-            case 'h': std::cout << "2\n"; parse_flag_help        (); break;
-            default : std::cout << "3\n"; parse_not_a_flag       (); break;
+            case 'i': parse_flag_input_stream();                       break;
+            case 'h': parse_flag_help        ();                       break;
+            case -1 : parse_not_a_flag       (argv[options_iterator]); break;
         }
     }
         // std::cout << "opt after = " << opt << std::endl;    
@@ -170,27 +171,26 @@ void flags_parser::parse_flag_input_stream()
 
 //---------------------------------------------------------------------------------------------------------------
 
-void flags_parser::parse_not_a_flag()
+void flags_parser::parse_not_a_flag(const char* argument)
 {
-    if (!optarg) // no options more
-        return;
+    assert(argument);
 
-    if (is_string_test_file_name(optarg))
+    if (is_string_test_file_name(argument))
     {
         if (!are_parametrs_already_defined_.is_define_input_stream)
             define_test_file_before_input_stream(); // exit 1
 
-        test_files_.test_file_ = optarg;
+        test_files_.test_file_ = argument;
         define_test_file();
         return;
     }
 
-    if (is_string_test_file_name(optarg))
+    if (is_string_answer_file_name(argument))
     {
         if (!are_parametrs_already_defined_.is_define_input_stream)
             define_answer_file_before_input_stream(); // exit 1
 
-        test_files_.answer_file_ = optarg;
+        test_files_.answer_file_ = argument;
         define_answer_file();
         return;
     }

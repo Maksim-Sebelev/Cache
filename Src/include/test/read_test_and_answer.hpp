@@ -49,12 +49,18 @@ ON_DEBUG(
 template <typename input_t>
 void test_data_t<input_t>::dump()
 {
+    std::cout << "=========== TEST DATA DUMP ===============" << std::endl << std::endl;
+
     std::cout << "ans        = " << get_test_answer() << std::endl;
     std::cout << "cache size = " << get_cache_size () << std::endl;
     std::cout << "input size = " << get_input_size () << std::endl;
+    std::cout << std::endl << std::endl;
+
 
     for (size_t i = 0; i < get_input_size(); i++)
         std::cout << "input[" << i << "] = " << get_i_element_of_data(i) << std::endl;
+    
+    std::cout << std::endl << "=========== TEST DATA DUMP END ==========" << std::endl << std::endl;
 }
 )
 
