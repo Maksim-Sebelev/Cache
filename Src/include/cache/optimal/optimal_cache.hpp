@@ -36,13 +36,6 @@ public:
         load_map_of_future();  
     }
     
-/*    bool add_cache(const key_t &key, const item_t &item)
-    {
-
-
-    } */
-
-
     void run_optimal_cache()
     {
         if (capacity_ == 0) return;

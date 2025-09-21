@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
         input_key_item[i] = {key, item};
     }
-    
+
     ARCCache<int, int> arc_cache(capacity);
     arc_cache.run_ARC_cache(input_key_item);
 
