@@ -43,7 +43,7 @@ class flags_parser
         };
 
         are_parametrs_already_defined are_parametrs_already_defined_;
-    
+
         static const struct option                        long_options            [];
         static const std::pair<input_stream, std::string> input_stream_flag_values[];
 
@@ -115,8 +115,8 @@ const std::pair<input_stream, std::string> flags_parser::input_stream_flag_value
 flags_parser::flags_parser(int argc, char* argv[]) :
 input_stream_                      (input_stream::standart_input), // default value of input_stream_
 test_files_                        ("", "")                      , // we don`t know files before parsing args
-are_parametrs_already_defined_     ({false, false, false})       , // nohing is defined before parsing args
-print_result_and_dont_check_answer_(true)                          // in default we get answer in stdin
+print_result_and_dont_check_answer_(true)                        , // in default we get answer in stdin
+are_parametrs_already_defined_     ({false, false, false})         // nohing is defined before parsing args
 {
     for (int options_iterator = 1; options_iterator < argc; options_iterator++)
     {

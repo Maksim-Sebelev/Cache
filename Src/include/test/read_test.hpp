@@ -15,24 +15,22 @@ struct test_input_t
 {
     public:
         // struct private variables
-        size_t  get_cache_size       ();
-        size_t  get_input_size       ();
-        input_t get_i_element_of_data(size_t i);
+        size_t               get_cache_size       ();
+        size_t               get_input_size       ();
+        input_t              get_i_element_of_data(size_t i);
+        std::vector<input_t> get_requests         ();
 
         // ctor
         test_input_t(); // ctor for reading from stdin
         test_input_t(const std::string& test_file); // ctor for reading from .dat file
 
-        // dtor
-       ~test_input_t();
-
     private:
         // struct private vairbales
-        size_t        cache_size_ ;
-        size_t        input_size_ ;
-        input_t*      data_       ;
-        std::ifstream file_       ;
-        std::string   test_file_  ;
+        size_t               cache_size_ ;
+        size_t               input_size_ ;
+        std::vector<input_t> data_       ;
+        std::ifstream        file_       ;
+        std::string          test_file_  ;
 
         // struct private methods
 
@@ -55,8 +53,6 @@ struct test_input_t
         void          negative_or_too_big_input_size_from_stdin         ();
         __attribute__ ((noreturn))
         void          failed_read_input_size_from_stdin                 ();
-        __attribute__ ((noreturn))
-        void          failed_allocate_memory_for_input_array_from_stdin ();
         __attribute__ ((noreturn))
         void          failed_read_i_page_from_stdin                     (size_t number_of_bad_page);
     
@@ -81,8 +77,6 @@ struct test_input_t
         void          negative_or_too_big_input_size_from_dat           ();
         __attribute__ ((noreturn))
         void          failed_read_input_size_from_dat                   ();
-        __attribute__ ((noreturn))
-        void          failed_allocate_memory_for_input_array_from_dat   ();
         __attribute__ ((noreturn))
         void          failed_read_i_page_from_dat                       (size_t number_of_bad_page);
 };
@@ -119,17 +113,6 @@ test_file_(test_file)
 
 //---------------------------------------------------------------------------------------------------------------
 
-// dtor
-template <typename input_t>
-test_input_t<input_t>::~test_input_t()
-{    
-    if (!data_)
-        return;
-
-    delete[] data_;
-}
-//---------------------------------------------------------------------------------------------------------------
-
 // public methods
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
@@ -158,6 +141,14 @@ input_t test_input_t<input_t>::get_i_element_of_data(size_t i)
         index_out_of_range(i);
 
     return data_[i];
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+std::vector<input_t> test_input_t<input_t>::get_requests()
+{
+    return data_;
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -245,10 +236,7 @@ void test_input_t<input_t>::read_input_size_from_stdin()
 template <typename input_t>
 void test_input_t<input_t>::read_test_data_from_stdin()
 {
-    data_ = new input_t[input_size_];
-
-    if (!data_)
-        failed_allocate_memory_for_input_array_from_stdin(); // exit 1
+    data_.resize(input_size_);
 
     for (size_t input_iter = 0; input_iter < input_size_; input_iter++)
     {
@@ -302,17 +290,6 @@ __attribute__ ((noreturn))
 void test_input_t<input_t>::failed_read_input_size_from_stdin()
 {
     std::cerr << "Failed read input size from stdin." << std::endl;
-
-    exit(EXIT_FAILURE);
-}
-
-//---------------------------------------------------------------------------------------------------------------
-
-template <typename input_t>
-__attribute__ ((noreturn))
-void test_input_t<input_t>::failed_allocate_memory_for_input_array_from_stdin()
-{
-    std::cerr << "Failed allocate for input from stdin." << std::endl;
 
     exit(EXIT_FAILURE);
 }
@@ -409,16 +386,14 @@ void test_input_t<input_t>::read_test_data_from_dat()
 {
     if (is_test_empty()) return; // no allocation memory for empty test
 
-    data_ = new input_t[input_size_];
-
-    if (!data_)
-        failed_allocate_memory_for_input_array_from_dat(); // exit 1
+    data_.resize(input_size_);
 
     for (size_t input_iter = 0; input_iter < input_size_; input_iter++)
     {
         file_ >> data_[input_iter];
-        
-        if (!file_.fail()) continue;
+
+        if (!file_.fail())
+            continue;
 
         failed_read_i_page_from_dat(input_iter); // exit 1
     }
@@ -482,18 +457,6 @@ void test_input_t<input_t>::failed_read_input_size_from_dat()
 {
     std::cerr << "Failed read input size from '" << test_file_ << "'"
               << std::endl;
-
-    exit(EXIT_FAILURE);
-}
-
-//---------------------------------------------------------------------------------------------------------------
-
-template <typename input_t>
-__attribute__ ((noreturn))
-void test_input_t<input_t>::failed_allocate_memory_for_input_array_from_dat()
-{
-    std::cerr << "Failed allocate for input from '" << test_file_
-              << "'" << std::endl;
 
     exit(EXIT_FAILURE);
 }

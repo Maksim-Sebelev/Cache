@@ -10,14 +10,16 @@
 #include <unordered_map>
 #include <cassert>
 
+#include "global.hpp"
+
 //---------------------------------------------------------------------------------------------------------------
 
-#include "CacheInterface.hpp"
+// #include "cache_interface.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t> 
-class ARCCache : public CacheInterface<key_t, item_t>
+class ARCCache
 {
     private:
         // class private definition
@@ -71,7 +73,7 @@ class ARCCache : public CacheInterface<key_t, item_t>
         // class private methods
 
         void adapt_ghost           (      ListLocation  location                                                                       );
-        bool not_empty_and_adaptive(                                                                                                   ) const;
+        bool not_empty_and_adaptive(                                                                                                   );
         void move_tail_to_front    (      ListType    & src          ,       ListType    &  dest    ,       ListLocation  dest_location);
         void replace_for_adapt     (                                                                                                   );
         void update_cache_map      (const key_t       & key          ,       ListLocation   location,       ListIter      list_it      );
@@ -86,30 +88,19 @@ class ARCCache : public CacheInterface<key_t, item_t>
     public:
         // class public methods
     
-        explicit ARCCache     (                                                                                ); // ctor 1
-        explicit ARCCache     (      size_t                                  capacity                          ); // ctor 1
-        item_t   get_item     (const key_t                                 & key                               ) const;
-        bool     add_cache    (const key_t                                 & key           , const item_t &item);
-        size_t   run_cache    (const std::vector<std::pair<key_t, item_t>> & input_key_item                    )       override;
-        size_t   get_hit_count(                                                                                ) const override;
-        
-
+                 ARCCache     (      size_t                capacity                          ); // ctor 1
+        item_t   get_item     (const key_t               & key                               );
+        bool     add_cache    (const key_t               & key           , const item_t &item);
+        size_t   run_cache    (const std::vector<item_t> & requests                          );
+        size_t   get_hit_count(                                                              );
 };
 
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
 
-// ctor 1
-template <typename key_t, typename item_t> 
-ARCCache<key_t, item_t>::ARCCache() :
-capacity_(0), hits_counter_(0), adapt_param_(0.0)
-{}
-
-//---------------------------------------------------------------------------------------------------------------
-
-// ctor 2
-template <typename key_t, typename item_t> 
+// ctor
+template <typename key_t, typename item_t>
 ARCCache<key_t, item_t>::ARCCache(size_t capacity) :
 capacity_(capacity), hits_counter_(0), adapt_param_(0.0) 
 {}
@@ -145,7 +136,7 @@ ARCCache<key_t, item_t>::adapt_ghost(ListLocation location)
 
 template <typename key_t, typename item_t>
 bool
-ARCCache<key_t, item_t>::not_empty_and_adaptive() const
+ARCCache<key_t, item_t>::not_empty_and_adaptive()
 {
     const size_t list_size_tmp = list_first_.size(); // size1
 
@@ -198,10 +189,10 @@ ARCCache<key_t, item_t>::move_to_dest_front(ListType&    src          , ListType
                                             ListIter     list_iterator, const ListLocation &location,
                                             const key_t& key)
 {
-    CacheEntry element = std::move(*list_iterator);
+    CacheEntry element = *list_iterator;
     src.erase(list_iterator);
 
-    dest.push_front(std::move(element));
+    dest.push_front(element);
     update_cache_map(key, location, dest.begin());
 }
 
@@ -211,7 +202,6 @@ template <typename key_t, typename item_t>
 void
 ARCCache<key_t, item_t>::move_to_frequent(ListLocation loc, const key_t &key, const ListIter &list_iterator)
 {
-    const auto &tmp = *list_iterator;
     switch(loc)
     {
         case ListLocation::FIRST_LIST:
@@ -228,10 +218,9 @@ ARCCache<key_t, item_t>::move_to_frequent(ListLocation loc, const key_t &key, co
         
         case ListLocation::FREQUENT_LIST:
             return;
-    }
 
-    list_frequent_.push_front(tmp);
-    update_cache_map(key, ListLocation::FREQUENT_LIST, list_frequent_.begin());
+        default: builtin_unreachable_wrapper("we must not be here");
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -271,6 +260,8 @@ ARCCache<key_t, item_t>::handle_existing_item(const CacheMapIter &cache_map_it, 
             
         case ListLocation::NOT_FOUND:
             return false;
+
+        default: break;
     };
 
     return false;
@@ -336,7 +327,7 @@ ARCCache<key_t, item_t>::add_new_item(const key_t &key, const item_t &item)
 
 template <typename key_t, typename item_t>
 item_t
-ARCCache<key_t, item_t>::get_item(const key_t &key) const
+ARCCache<key_t, item_t>::get_item(const key_t &key)
 {
     CacheMapIter cache_map_it = cache_map_.find(key);
     
@@ -353,12 +344,12 @@ ARCCache<key_t, item_t>::add_cache(const key_t &key, const item_t &item)
 {
     if (capacity_ == 0) return false;
 
-    CacheMapIter cache_map_it = cache_map_.find(key); 
+    CacheMapIter cache_map_it = cache_map_.find(key);
 
-    if (cache_map_it != cache_map_.end()) 
+    if (cache_map_it != cache_map_.end())
         return handle_existing_item(cache_map_it, key);
 
-    add_new_item(key, item); 
+    add_new_item(key, item);
     return false; 
 }
         
@@ -366,22 +357,28 @@ ARCCache<key_t, item_t>::add_cache(const key_t &key, const item_t &item)
 
 template <typename key_t, typename item_t>
 size_t
-ARCCache<key_t, item_t>::run_cache(const std::vector<std::pair<key_t, item_t>> &input_key_item)
+ARCCache<key_t, item_t>::run_cache(const std::vector<item_t>& requests)
 {
-    if (capacity_ <  0) return -1;
-    if (capacity_ == 0) return  0;
-    
-    for (size_t i = 0; i < input_key_item.size(); i++)
-        add_cache(input_key_item[i].first, input_key_item[i].second);
+    const size_t requests_quant = requests.size();
+    std::cout << "REQUESTS QUANT = " << requests_quant << std::endl;
 
-    return get_hit_count();
+    for (size_t i = 0; i < requests_quant; i++)
+    {
+        key_t key_tmp = requests[i];
+      //  std::cout << i << std::endl;
+        std::cout << requests[i] << std::endl;
+        add_cache(key_tmp, requests[i]);
+       // std::cout << i << std::endl;
+    }
+
+    return hits_counter_;
 }
 
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
 size_t
-ARCCache<key_t, item_t>::get_hit_count() const
+ARCCache<key_t, item_t>::get_hit_count()
 {
     return hits_counter_;
 }

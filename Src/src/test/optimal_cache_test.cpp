@@ -1,23 +1,34 @@
-#include <vector>
+#include <cstdlib>
 
-#include "cache/optimal/optimal_cache.hpp"
-#include "utils/driver/driver.hpp"
+#include "optimal_cache.hpp"
+#include "get_test_data.hpp"
+#include "parse_test_result.hpp"
 
+#include "global.hpp"
 
-int main()
+using item_t = int;
+using key_t  = int;
+
+int main(int argc, char* argv[])
 {
-    // HtmlLogger::init("optimal_cache_log");
+    test_data_t<item_t>*     test_data         = get_test_data            <item_t>(argc, argv                  ); ON_DEBUG(test_data->dump();)
+    size_t                   cache_capacity    = test_data->get_cache_size        (                            );
+    OPT_cache<key_t, item_t> opt_cache                                            (cache_capacity              );
+    std::vector<item_t>      requests           = test_data->get_requests          (                           );
 
-    // ssize_t capacity = 0;
-    // ssize_t amount_numbers = 0;
+    std::vector<std::pair<key_t, item_t>> requets_correct_format(cache_capacity);
+
+    for (size_t i = 0; i < cache_capacity; i++)
+        requets_correct_format[i] = {requests[i], requests[i]};
     
-    // std::cin >> capacity >> amount_numbers;
+    size_t                   cache_test_result = opt_cache.run_cache              (requets_correct_format      );
+    TestResult               test_result_type  = parse_test_result                (cache_test_result, test_data);
 
-    // CacheDriver<ssize_t, ssize_t> driver;
-    // auto optimal_cache_requests = driver.generate_requests(amount_numbers);
+    delete test_data;
 
-    // OPT_cache<ssize_t, ssize_t> optimal_cache(capacity);
-    // driver.run_cache(optimal_cache, optimal_cache_requests);
+    if (test_result_type == TestResult::TEST_FAILED)
+        return EXIT_FAILURE;
 
-    // HtmlLogger::close();
+
+    return 0;
 }

@@ -25,22 +25,21 @@ struct test_data_t
         test_input_t<input_t> test_input_                        ;
         test_answer_t         test_answer_                       ;
         bool                  print_result_and_dont_check_answer_;
-        
+
     public:
         // public struct methods
         // ctor`s
         test_data_t();                               // ctor for stdin
         test_data_t(const test_files_t& test_files); // ctor for files 
 
-        size_t  get_test_answer      ();
-        size_t  get_cache_size       ();
-        size_t  get_input_size       ();
-        input_t get_i_element_of_data(size_t i);
-
-        bool    print_result_and_dont_check_answer();
-
+        size_t               get_test_answer                   ();
+        size_t               get_cache_size                    ();
+        size_t               get_input_size                    ();
+        input_t              get_i_element_of_data             (size_t i);
+        std::vector<input_t> get_requests                      ();
+        bool                 print_result_and_dont_check_answer();
         ON_DEBUG(
-        void dump();
+        void                 dump                              ();
         )
 };
 
@@ -55,32 +54,32 @@ struct test_data_t
 // !!! in README is more information about this
 
 template <typename input_t>
-std::unique_ptr<test_data_t<input_t>> get_test_data(int argc, char* argv[])
+test_data_t<input_t>* get_test_data(int argc, char* argv[])
 {
     flags_parser  parsing_flags_result(argc, argv);
     input_stream  type_of_input_sream = parsing_flags_result.get_input_stream();
 
     assert(type_of_input_sream != input_stream::invalid_input_stream);
 
-    std::unique_ptr<test_data_t<input_t>> test_data;
+    test_data_t<input_t>* test_data = nullptr;
 
     switch (type_of_input_sream)
     {
         case input_stream::standart_input:
         {
-            test_data = std::make_unique<test_data_t<input_t>>();
+            test_data = new test_data_t<input_t>();
             break;
         }
 
         case input_stream::dat_file_stream:
         {
             test_files_t test_files = parsing_flags_result.get_test_files();
-            test_data = std::make_unique<test_data_t<input_t>>(test_files);
+            test_data = new test_data_t<input_t>(test_files);
             break;
         }
 
         case input_stream::invalid_input_stream:
-        default: assert(0 && "wtf?"); __builtin_unreachable();
+        default: builtin_unreachable_wrapper("program wait here only correct input_stream");
 
     }
 
@@ -155,6 +154,14 @@ template <typename input_t>
 input_t test_data_t<input_t>::get_i_element_of_data(size_t i)
 {
     return test_input_.get_i_element_of_data(i);
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+std::vector<input_t> test_data_t<input_t>::get_requests()
+{
+    return test_input_.get_requests();
 }
 
 //---------------------------------------------------------------------------------------------------------------

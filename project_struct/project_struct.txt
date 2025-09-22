@@ -10,12 +10,8 @@
 │   │   ├── cache
 │   │   │   ├── arc
 │   │   │   │   └── arc_cache.hpp
-│   │   │   ├── CacheInterface.hpp
-│   │   │   ├── optimal
-│   │   │   │   └── optimal_cache.hpp
-│   │   │   └── utils
-│   │   │       └── driver
-│   │   │           └── driver.hpp
+│   │   │   └── optimal
+│   │   │       └── optimal_cache.hpp
 │   │   ├── global.hpp
 │   │   └── test
 │   │       ├── get_test_data.hpp
@@ -72,4 +68,4 @@
             ├── 9.ans
             └── 9.dat
 
-20 directories, 53 files
+18 directories, 51 files

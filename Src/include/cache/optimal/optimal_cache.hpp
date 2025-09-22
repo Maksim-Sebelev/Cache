@@ -9,18 +9,15 @@
 #include <iostream>
 #include <cstdint>
 
-//---------------------------------------------------------------------------------------------------------------
-
-#include "CacheInterface.hpp"
 #include "global.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
-struct OPT_cache : CacheInterface<key_t, item_t>
+struct OPT_cache
 {
     private:
-        // struct typedefs
+        // struct typedef
         using index_t      = ssize_t;
         using request_t    = typename std::pair<key_t, item_t>;
         using IndexMapType = typename std::unordered_map<key_t, std::deque<index_t>>;
@@ -29,8 +26,7 @@ struct OPT_cache : CacheInterface<key_t, item_t>
 
         // class private constants
         static constexpr key_t   POISON_KEY = static_cast<ssize_t>(0XEDAA);
-        static constexpr index_t INF_INDEX  = UINT64_MAX;
-
+        static constexpr index_t INF_INDEX  = ~((index_t) 0); // index_t max value
 
         // class private variables
         ssize_t      capacity_;
@@ -41,10 +37,10 @@ struct OPT_cache : CacheInterface<key_t, item_t>
 
 
     public:
-        explicit    OPT_cache        ();
-        explicit    OPT_cache        (ssize_t input_capacity);
-        ssize_t     run_cache        (const input_vector &key_items)       override;
-        ssize_t     get_hit_count    ()                              const override;
+                    OPT_cache        ();
+                    OPT_cache        (ssize_t input_capacity);
+        ssize_t     run_cache        (const input_vector &key_items) ;
+        ssize_t     get_hit_count    ()                              ;
 
     private:
         // struct private methods
@@ -53,7 +49,7 @@ struct OPT_cache : CacheInterface<key_t, item_t>
         void        load_map_of_future(const input_vector &key_items);
 
         ON_DEBUG(
-        void        cache_map_dump    ()  const;
+        void        cache_map_dump    ();
         )
 };
 
@@ -114,7 +110,7 @@ OPT_cache<key_t, item_t>::run_cache(const typename OPT_cache<key_t, item_t>::inp
 
 template <typename key_t, typename item_t>
 ssize_t
-OPT_cache<key_t, item_t>::get_hit_count() const
+OPT_cache<key_t, item_t>::get_hit_count()
 {
     return hits_counter_;
 }
@@ -172,7 +168,7 @@ OPT_cache<key_t, item_t>::load_map_of_future(const input_vector &key_items)
 ON_DEBUG(
 template <typename key_t, typename item_t>
 void
-OPT_cache<key_t, item_t>::cache_map_dump() const
+OPT_cache<key_t, item_t>::cache_map_dump()
 {
     for (const auto &pair : cache_map_)
     {
