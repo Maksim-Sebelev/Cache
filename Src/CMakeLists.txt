@@ -93,6 +93,11 @@ add_custom_target(${REBUILD_TARGET}
 # we are compiling the cache function
 # for testing separately and with some another settings
 
+set(GLOBAL_INC_DIR          ${PROJECT_SOURCE_DIR}/include)
+
+set(CACHE_INTERFACE_INC_DIR ${PROJECT_SOURCE_DIR}/include/cache)
+set(CACHE_DRIVER_INC_DIR    ${PROJECT_SOURCE_DIR}/include/cache/utils/driver)
+
 
 # arc 
 set(ARC_CACHE_TEST_SRC_DIR ${PROJECT_SOURCE_DIR}/src/test         )
@@ -114,6 +119,9 @@ target_include_directories(${ARC_CACHE_TEST_EXE}
 	PRIVATE
 		${ARC_CACHE_TEST_INC_DIR}
 		${ARC_CACHE_INC_DIR}
+		${CACHE_DRIVER_INC_DIR}
+		${CACHE_INTERFACE_INC_DIR}
+		${GLOBAL_INC_DIR}
 )
 
 add_release_and_debug_options_to_executable(${ARC_CACHE_TEST_EXE})
@@ -139,6 +147,9 @@ target_include_directories(${OPTIMAL_CACHE_TEST_EXE}
 	PRIVATE
 		${OPTIMAL_CACHE_TEST_INC_DIR}
 		${OPTIMAL_CACHE_INC_DIR}
+		${CACHE_DRIVER_INC_DIR}
+		${CACHE_INTERFACE_INC_DIR}
+		${GLOBAL_INC_DIR}
 )
 
 add_release_and_debug_options_to_executable(${OPTIMAL_CACHE_TEST_EXE})

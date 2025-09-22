@@ -398,9 +398,9 @@ std::string flags_parser::get_file_extension(const std::string& filename)
     if ((dot_pos != std::string::npos) && // dot is found
         (dot_pos + 1 < filename.size()))  // dot isn`t last symbol
     
-        return filename.substr(dot_pos); // return ".govno"
+        return filename.substr(dot_pos); // return ".ext"
 
-    return "";
+    return ""; // return empty string, because this file has not an extension
 }
 
 //---------------------------------------------------------------------------------------------------------------

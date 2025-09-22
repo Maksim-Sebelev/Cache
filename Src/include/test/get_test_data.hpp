@@ -13,14 +13,7 @@
 #include "input_stream.hpp"
 #include "parse_args.hpp"
 
-//---------------------------------------------------------------------------------------------------------------
-
-#ifdef _DEBUG
-#define ON_DEBUG(...) __VA_ARGS__
-#include <iostream>
-#else // _DEBUG
-#define ON_DEBUG(...)
-#endif // _DEBUG
+#include "global.hpp"
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -105,7 +98,6 @@ void test_data_t<input_t>::dump()
     std::cout << "cache size = " << get_cache_size () << std::endl;
     std::cout << "input size = " << get_input_size () << std::endl;
     std::cout << std::endl << std::endl;
-
 
     for (size_t i = 0; i < get_input_size(); i++)
         std::cout << "input[" << i << "] = " << get_i_element_of_data(i) << std::endl;
