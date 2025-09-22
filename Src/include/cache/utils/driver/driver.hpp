@@ -20,7 +20,8 @@ class CacheDriver
         using request_t = typename std::pair<key_t, item_t>;
 
         // class private variables
-        std::vector<request_t> requests_;
+        std::vector<request_t> requests_  ;
+        size_t                 cache_size_;
 
     public:
         // ctor
@@ -40,10 +41,11 @@ class CacheDriver
 
 //ctor
 template <typename key_t, typename item_t>
-CacheDriver<key_t, item_t>::CacheDriver(const std::unique_ptr<test_data_t<key_t>>& test_data)
+CacheDriver<key_t, item_t>::CacheDriver(const std::unique_ptr<test_data_t<key_t>>& test_data) :
+requests_(test_data->get_input_size()), cache_size_(test_data->get_cache_size())
 {
     size_t requests_quant = test_data->get_input_size();
-    requests_.resize(requests_quant);
+    // requests_.resize(requests_quant);
 
     for (size_t i = 0; i < requests_quant; i++)
     {

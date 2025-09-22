@@ -20,9 +20,6 @@ template <typename key_t, typename item_t>
 class ARCCache : public CacheInterface<key_t, item_t>
 {
     private:
-        // class constant
-        static constexpr ssize_t STD_CAPACITY = 64;
-
         // class private definition
         enum class ListLocation
         {
@@ -60,8 +57,8 @@ class ARCCache : public CacheInterface<key_t, item_t>
 
         // class private variables
 
-        ssize_t      capacity_           ;
-        ssize_t      hits_counter_       ;
+        size_t       capacity_           ;
+        size_t       hits_counter_       ;
         double       adapt_param_        ;
 
         ListType     list_first_         ;
@@ -90,11 +87,11 @@ class ARCCache : public CacheInterface<key_t, item_t>
         // class public methods
     
         explicit ARCCache     (                                                                                ); // ctor 1
-        explicit ARCCache     (      ssize_t                                 capacity                          ); // ctor 1
+        explicit ARCCache     (      size_t                                  capacity                          ); // ctor 1
         item_t   get_item     (const key_t                                 & key                               ) const;
         bool     add_cache    (const key_t                                 & key           , const item_t &item);
-        ssize_t  run_cache    (const std::vector<std::pair<key_t, item_t>> & input_key_item                    )       override;
-        ssize_t  get_hit_count(                                                                                ) const override;
+        size_t   run_cache    (const std::vector<std::pair<key_t, item_t>> & input_key_item                    )       override;
+        size_t   get_hit_count(                                                                                ) const override;
         
 
 };
@@ -113,12 +110,9 @@ capacity_(0), hits_counter_(0), adapt_param_(0.0)
 
 // ctor 2
 template <typename key_t, typename item_t> 
-ARCCache<key_t, item_t>::ARCCache(ssize_t capacity) :
+ARCCache<key_t, item_t>::ARCCache(size_t capacity) :
 capacity_(capacity), hits_counter_(0), adapt_param_(0.0) 
-{
-    if (capacity <= 0)
-        capacity_ = STD_CAPACITY;
-}
+{}
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -153,11 +147,11 @@ template <typename key_t, typename item_t>
 bool
 ARCCache<key_t, item_t>::not_empty_and_adaptive() const
 {
-    const ssize_t list_size_tmp = list_first_.size(); // size1
+    const size_t list_size_tmp = list_first_.size(); // size1
 
     bool is_list_not_empty = list_size_tmp >= 1;
-    bool is_list_adaptive_enough = list_size_tmp > static_cast<ssize_t>(adapt_param_) || 
-                                    (list_size_tmp == static_cast<ssize_t>(adapt_param_) && !list_frequent_ghost_.empty());
+    bool is_list_adaptive_enough = list_size_tmp > static_cast<size_t>(adapt_param_) || 
+                                    (list_size_tmp == static_cast<size_t>(adapt_param_) && !list_frequent_ghost_.empty());
 
     return is_list_not_empty && is_list_adaptive_enough;
 }
@@ -288,13 +282,13 @@ template <typename key_t, typename item_t>
 void
 ARCCache<key_t, item_t>::handle_cache_overflow()
 {
-    ssize_t list1_size   = list_first_.size();
-    ssize_t list1gh_size = list_first_ghost_.size();
-    ssize_t list2_size   = list_frequent_.size();
-    ssize_t list2gh_size = list_frequent_ghost_.size();
+    size_t list1_size   = list_first_.size();
+    size_t list1gh_size = list_first_ghost_.size();
+    size_t list2_size   = list_frequent_.size();
+    size_t list2gh_size = list_frequent_ghost_.size();
 
 
-    ssize_t sum_size_lists = list1_size + list2_size + list1gh_size + list2gh_size;
+    size_t sum_size_lists = list1_size + list2_size + list1gh_size + list2gh_size;
     if (list1_size + list1gh_size == capacity_)
     {
         if (list1_size < capacity_)
@@ -357,8 +351,8 @@ template <typename key_t, typename item_t>
 bool
 ARCCache<key_t, item_t>::add_cache(const key_t &key, const item_t &item)
 {
-    if (capacity_ <= 0) return false;
-    
+    if (capacity_ == 0) return false;
+
     CacheMapIter cache_map_it = cache_map_.find(key); 
 
     if (cache_map_it != cache_map_.end()) 
@@ -371,13 +365,13 @@ ARCCache<key_t, item_t>::add_cache(const key_t &key, const item_t &item)
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
-ssize_t
+size_t
 ARCCache<key_t, item_t>::run_cache(const std::vector<std::pair<key_t, item_t>> &input_key_item)
 {
     if (capacity_ <  0) return -1;
     if (capacity_ == 0) return  0;
     
-    for (ssize_t i = 0; i < input_key_item.size(); i++)
+    for (size_t i = 0; i < input_key_item.size(); i++)
         add_cache(input_key_item[i].first, input_key_item[i].second);
 
     return get_hit_count();
@@ -386,7 +380,7 @@ ARCCache<key_t, item_t>::run_cache(const std::vector<std::pair<key_t, item_t>> &
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
-ssize_t 
+size_t
 ARCCache<key_t, item_t>::get_hit_count() const
 {
     return hits_counter_;

@@ -22,9 +22,10 @@ struct test_data_t
 {
     private:
         // private struct variables
-        test_input_t<input_t> test_input_ ;
-        test_answer_t         test_answer_;
-
+        test_input_t<input_t> test_input_                        ;
+        test_answer_t         test_answer_                       ;
+        bool                  print_result_and_dont_check_answer_;
+        
     public:
         // public struct methods
         // ctor`s
@@ -35,6 +36,8 @@ struct test_data_t
         size_t  get_cache_size       ();
         size_t  get_input_size       ();
         input_t get_i_element_of_data(size_t i);
+
+        bool    print_result_and_dont_check_answer();
 
         ON_DEBUG(
         void dump();
@@ -111,7 +114,7 @@ void test_data_t<input_t>::dump()
 // ctor for reading from files
 template <typename input_t>
 test_data_t<input_t>::test_data_t(const test_files_t& test_files) :
-test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
+test_input_(test_files.test_file_), test_answer_(test_files.answer_file_), print_result_and_dont_check_answer_(false)
 {}
 
 //---------------------------------------------------------------------------------------------------------------
@@ -119,7 +122,7 @@ test_input_(test_files.test_file_), test_answer_(test_files.answer_file_)
 // ctor for reading from stdin
 template <typename input_t>
 test_data_t<input_t>::test_data_t() :
-test_input_(), test_answer_()
+test_input_(), test_answer_(), print_result_and_dont_check_answer_(true)
 {}
 
 //---------------------------------------------------------------------------------------------------------------
@@ -152,6 +155,14 @@ template <typename input_t>
 input_t test_data_t<input_t>::get_i_element_of_data(size_t i)
 {
     return test_input_.get_i_element_of_data(i);
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename input_t>
+bool test_data_t<input_t>::print_result_and_dont_check_answer()
+{
+    return print_result_and_dont_check_answer_;
 }
 
 //---------------------------------------------------------------------------------------------------------------

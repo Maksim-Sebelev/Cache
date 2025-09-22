@@ -20,8 +20,10 @@ class flags_parser
 {
     public:
         // class public methods
-        input_stream   get_input_stream     ();
-        test_files_t  get_test_files       ();
+        input_stream   get_input_stream                  ();
+        test_files_t   get_test_files                    ();
+        bool           print_result_and_dont_check_answer();
+        
 
         // ctor
         flags_parser(int argc, char* argv[]);
@@ -29,8 +31,9 @@ class flags_parser
     private:
         
         // class private variables
-        input_stream  input_stream_;
-        test_files_t test_files_  ;
+        input_stream  input_stream_                      ;
+        test_files_t  test_files_                        ;
+        bool          print_result_and_dont_check_answer_;
 
         struct are_parametrs_already_defined
         {
@@ -41,26 +44,26 @@ class flags_parser
 
         are_parametrs_already_defined are_parametrs_already_defined_;
     
-        void define_input_stream();
-        void define_test_file   ();
-        void define_answer_file ();
-
-        static const struct option                       long_options            [];
+        static const struct option                        long_options            [];
         static const std::pair<input_stream, std::string> input_stream_flag_values[];
 
         // class private methods
 
-        void parse_flag_input_stream                         ();
-        __attribute__ ((noreturn))
-        void parse_flag_help                                 ();
-        void parse_not_a_flag                                (const char* argument); // maybe test file name, maybe invalid option
+        void parse_flag_input_stream                                 ();
+        __attribute__ ((noreturn))        
+        void parse_flag_help                                         ();
+        void parse_not_a_flag                                        (const char* argument); // maybe test file name, maybe invalid option
+
+        void define_input_stream                                     ();
+        void define_test_file                                        ();
+        void define_answer_file                                      ();
 
 
-        input_stream get_type_of_input_stream                 ();
-
-        std::string get_file_extension                       (const std::string& filename);
-        bool        is_string_test_file_name  (const std::string& test_file);
-        bool        is_string_answer_file_name(const std::string& test_file);
+        input_stream get_type_of_input_stream                        ();
+        
+        std::string get_file_extension                               (const std::string& filename);
+        bool        is_string_test_file_name                         (const std::string& test_file);
+        bool        is_string_answer_file_name                       (const std::string& test_file);
 
         __attribute__ ((noreturn))
         void         invalid_type_of_input_stream                    ();
@@ -110,9 +113,10 @@ const std::pair<input_stream, std::string> flags_parser::input_stream_flag_value
 // ctor
 
 flags_parser::flags_parser(int argc, char* argv[]) :
-input_stream_                 (input_stream::standart_input), // default value of input_stream_
-test_files_                   ("", "")                     , // we don`t know files before parsing args
-are_parametrs_already_defined_({false, false, false})        // nohing is defined before parsing args
+input_stream_                      (input_stream::standart_input), // default value of input_stream_
+test_files_                        ("", "")                      , // we don`t know files before parsing args
+are_parametrs_already_defined_     ({false, false, false})       , // nohing is defined before parsing args
+print_result_and_dont_check_answer_(true)                          // in default we get answer in stdin
 {
     for (int options_iterator = 1; options_iterator < argc; options_iterator++)
     {
@@ -149,6 +153,13 @@ test_files_t flags_parser::get_test_files()
 
 //---------------------------------------------------------------------------------------------------------------
 
+bool flags_parser::print_result_and_dont_check_answer()
+{
+    return print_result_and_dont_check_answer_;
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
 // class private methods
 //---------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
@@ -157,6 +168,9 @@ test_files_t flags_parser::get_test_files()
 void flags_parser::parse_flag_input_stream()
 {
     input_stream_ = get_type_of_input_stream();
+
+    if (input_stream_ == input_stream::dat_file_stream)
+        print_result_and_dont_check_answer_ = false;
 
     if (input_stream_ == input_stream::invalid_input_stream)
         invalid_type_of_input_stream(); // exit 1

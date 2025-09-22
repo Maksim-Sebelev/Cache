@@ -14,7 +14,7 @@ class CacheInterface
     public:
         virtual ssize_t run_cache      (const std::vector<std::pair<key_t, item_t>>& requests) = 0;
         virtual ssize_t get_hit_count  () const = 0;
-        virtual void    dump           () const = 0;
+        // virtual void    dump           () const = 0;
 };
 
 //---------------------------------------------------------------------------------------------------------------

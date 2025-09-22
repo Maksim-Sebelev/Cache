@@ -21,6 +21,7 @@
 │   │       ├── get_test_data.hpp
 │   │       ├── input_stream.hpp
 │   │       ├── parse_args.hpp
+│   │       ├── parse_test_result.hpp
 │   │       ├── read_answer.hpp
 │   │       ├── read_test.hpp
 │   │       └── test_files.hpp
@@ -71,4 +72,4 @@
             ├── 9.ans
             └── 9.dat
 
-20 directories, 52 files
+20 directories, 53 files
