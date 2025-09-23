@@ -155,6 +155,10 @@ add_release_and_debug_options_to_executable(${OPTIMAL_CACHE_TEST_EXE})
 enable_testing()
 include(CTest)
 
+
+# make color output for failed tests
+set(CTEST_OUTPUT_ON_FAILURE ON)
+
 # function for adding tests to some executable files
 function(add_testing test_executable test_dir ans_dir)
 

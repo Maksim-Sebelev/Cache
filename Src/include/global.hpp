@@ -3,9 +3,10 @@
 
 //---------------------------------------------------------------------------------------------------------------
 
+#include <cassert>
+
 #ifdef _DEBUG
 #define ON_DEBUG(...) __VA_ARGS__
-#include <iostream>
 #else // _DEBUG
 #define ON_DEBUG(...)
 #endif // _DEBUG

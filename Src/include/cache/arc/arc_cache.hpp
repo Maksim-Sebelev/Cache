@@ -25,11 +25,11 @@ class ARCCache
         // class private definition
         enum class ListLocation
         {
-            FIRST_LIST,
-            FREQUENT_LIST,
-            FIRST_LIST_GHOST,
+            FIRST_LIST         ,
+            FREQUENT_LIST      ,
+            FIRST_LIST_GHOST   ,
             FREQUENT_LIST_GHOST,
-            NOT_FOUND
+            NOT_FOUND          ,
         };
 
         struct CacheEntry
@@ -72,27 +72,39 @@ class ARCCache
 
         // class private methods
 
-        void adapt_ghost           (      ListLocation  location                                                                       );
-        bool not_empty_and_adaptive(                                                                                                   );
-        void move_tail_to_front    (      ListType    & src          ,       ListType    &  dest    ,       ListLocation  dest_location);
-        void replace_for_adapt     (                                                                                                   );
-        void update_cache_map      (const key_t       & key          ,       ListLocation   location,       ListIter      list_it      );
-        void move_to_dest_front    (      ListType    & src          ,       ListType    &  dest    , 
-                                          ListIter      list_iterator, const ListLocation&  location, const key_t       & key          );
-        void move_to_frequent      (      ListLocation  loc          , const key_t       &  key     , const ListIter    & list_iterator);
-        void handle_ghost          (      ListLocation  location     , key_t                key     ,       ListIter      list_iterator);
-        bool handle_existing_item  (const CacheMapIter& cache_map_it , const key_t       &  key                                        );
-        void handle_cache_overflow (                                                                                                   );
-        void add_new_item          (const key_t       &  key         , const item_t      &  item                                       );
+        void adapt_ghost           (      ListLocation   location                                                                       );
+        bool not_empty_and_adaptive(                                                                                                    );
+        void move_tail_to_front    (      ListType     & src          ,       ListType    &  dest    ,       ListLocation  dest_location);
+        void replace_for_adapt     (                                                                                                    );
+        void update_cache_map      (const key_t        & key          ,       ListLocation   location,       ListIter      list_it      );
+        void move_to_dest_front    (      ListType     & src          ,       ListType    &  dest    , 
+                                          ListIter       list_iterator, const ListLocation&  location, const key_t       & key          );
+        void move_to_frequent      (      ListLocation   loc          , const key_t       &  key     , const ListIter    & list_iterator);
+        void handle_ghost          (      ListLocation   location     , key_t                key     ,       ListIter      list_iterator);
+        bool handle_existing_item  (const CacheMapIter & cache_map_it , const key_t       &  key                                        );
+        void handle_cache_overflow (                                                                                                    );
+        void add_new_item          (const key_t        & key          , const item_t      &  item                                       );
+
+        ON_DEBUG(
+        void print_header          (const std::string  & word                                                                           );
+        void print_separator       (                                                                                                    );
+        void print_location        (      ListLocation   loc                                                                            );
+        void cache_map_dump        (const CacheMapType & cache_map                                                                      );
+        void list_header           (const ListLocation   which_list                                                                     );
+        void list_dump             (const ListType     & list         , const ListLocation   which_list                                 );
+        )
 
     public:
         // class public methods
-    
-                 ARCCache     (      size_t                capacity                          ); // ctor 1
-        item_t   get_item     (const key_t               & key                               );
-        bool     add_cache    (const key_t               & key           , const item_t &item);
-        size_t   run_cache    (const std::vector<item_t> & requests                          );
-        size_t   get_hit_count(                                                              );
+
+               ARCCache     (      size_t                capacity                          ); // ctor 1
+        item_t get_item     (const key_t               & key                               );
+        bool   add_cache    (const key_t               & key           , const item_t &item);
+        size_t run_cache    (const std::vector<item_t> & requests                          );
+        size_t get_hit_count(                                                              );
+        ON_DEBUG(
+        void   dump         (                                                              );
+        )
 };
 
 //---------------------------------------------------------------------------------------------------------------
@@ -211,16 +223,17 @@ ARCCache<key_t, item_t>::move_to_frequent(ListLocation loc, const key_t &key, co
         case ListLocation::FIRST_LIST_GHOST:
             move_to_dest_front(list_first_ghost_, list_frequent_, list_iterator, loc, key);
             break;
-        
+
         case ListLocation::FREQUENT_LIST_GHOST:
             move_to_dest_front(list_frequent_ghost_, list_frequent_, list_iterator, loc, key);
             break;
-        
+
         case ListLocation::FREQUENT_LIST:
             return;
 
-        default: builtin_unreachable_wrapper("we must not be here");
+        default: builtin_unreachable_wrapper("we must not be here"); // FIXME
     }
+
 }
 
 //---------------------------------------------------------------------------------------------------------------
@@ -331,7 +344,8 @@ ARCCache<key_t, item_t>::get_item(const key_t &key)
 {
     CacheMapIter cache_map_it = cache_map_.find(key);
     
-        if (cache_map_it == cache_map_.end()) return item_t();
+    if (cache_map_it == cache_map_.end())
+        return item_t();
 
     return cache_map_it->second.list_iter->item;
 }
@@ -360,15 +374,11 @@ size_t
 ARCCache<key_t, item_t>::run_cache(const std::vector<item_t>& requests)
 {
     const size_t requests_quant = requests.size();
-    std::cout << "REQUESTS QUANT = " << requests_quant << std::endl;
 
     for (size_t i = 0; i < requests_quant; i++)
     {
         key_t key_tmp = requests[i];
-      //  std::cout << i << std::endl;
-        std::cout << requests[i] << std::endl;
         add_cache(key_tmp, requests[i]);
-       // std::cout << i << std::endl;
     }
 
     return hits_counter_;
@@ -382,6 +392,172 @@ ARCCache<key_t, item_t>::get_hit_count()
 {
     return hits_counter_;
 }
+
+//---------------------------------------------------------------------------------------------------------------
+
+ON_DEBUG(
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::print_header(const std::string &word)
+{
+    std::cout << "============ " << word << " ============\n\n";
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::print_separator()
+{
+    std::cout << "\n=======================================\n\n";
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::print_location(ListLocation loc)
+{
+    switch(loc)
+    {
+        case ListLocation::FIRST_LIST:
+            std::cout << "First occur list";
+            break;
+
+        case ListLocation::FREQUENT_LIST:
+            std::cout << "Frequent occur list";
+            break;
+
+        case ListLocation::FIRST_LIST_GHOST:
+            std::cout << "First occur ghost_list";
+            break;
+
+        case ListLocation::FREQUENT_LIST_GHOST:
+            std::cout << "Frequent occur ghost_list";
+            break;
+
+        case ListLocation::NOT_FOUND:
+            std::cout << "ELEMENT WASN`T FOUND IN ANY LIST";
+            break;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::cache_map_dump(const CacheMapType &cache_map)
+{
+
+    print_header("cache_map DUMP");
+
+    for (const auto &pair : cache_map) // pair = cache_map.begin -> cache_map.end() <=> pair - cache_map_it
+    {
+        const LocationInfo &loc_info = pair.second; // pair.second - iterator 
+        const ListIter     &list_it  = loc_info.list_iter;
+
+        std::cout << "key = " << pair.first << ": " << "item location: ";
+
+        print_location(loc_info.location);
+
+        if (list_it != ListIter())
+        {
+            std::cout << " item: " << list_it->item;
+            std::cout << " key by cache info: " << list_it->key; 
+        }
+        else 
+            std::cout << " INVALID ITERATOR";
+
+        std::cout << std::endl;
+    }
+    print_separator();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::list_header(const ListLocation which_list)
+{
+    switch(which_list)
+    {
+        case ListLocation::FIRST_LIST:
+            print_header("First occur list DUMP");
+            break;
+
+        case ListLocation::FREQUENT_LIST:
+            print_header("Frequent occur list DUMP");
+            break;
+
+        case ListLocation::FIRST_LIST_GHOST:
+            print_header("First occur list_ghost DUMP");
+            break;
+
+        case ListLocation::FREQUENT_LIST_GHOST:
+            print_header("Frequent occur list_ghost DUMP");
+            break;
+
+        case ListLocation::NOT_FOUND:
+            print_header("UNDEFINED LIST");
+            break;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::list_dump(const ListType &list, const ListLocation which_list)
+{
+    list_header(which_list);
+
+
+    std::size_t i = 0;
+    std::size_t size = list.size();
+    for (const auto &cache : list) // pair => list.begin() == ListIter
+    {
+        item_t item = cache.item;
+        key_t  key  = cache.key;
+
+        std::cout << "[ item" << i++ <<" = " << item <<"(cache_map key: " << key <<  ") ]";
+        if (i < size) std::cout << "<==>";
+    }
+
+    std::cout.put('\n');
+    print_separator();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+template <typename key_t, typename item_t>
+void
+ARCCache<key_t, item_t>::dump()
+{
+    print_header("Adaptive replacement cache DUMP");
+    
+    std::cout << "capacity: " << capacity_ << std::endl;
+    std::cout << "hit count: " << hits_counter_ << std::endl;
+    std::cout << "adadptive parametr:" << static_cast<double>(adapt_param_) << std::endl;
+
+    cache_map_dump(cache_map_);
+
+    list_dump(list_first_, ListLocation::FIRST_LIST);
+    list_dump(list_frequent_, ListLocation::FREQUENT_LIST);
+    list_dump(list_first_ghost_, ListLocation::FIRST_LIST_GHOST);
+    list_dump(list_frequent_ghost_, ListLocation::FREQUENT_LIST_GHOST);
+
+    print_separator();
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+) // ON_DEBUG
+
+//---------------------------------------------------------------------------------------------------------------
+
 
 //---------------------------------------------------------------------------------------------------------------
 

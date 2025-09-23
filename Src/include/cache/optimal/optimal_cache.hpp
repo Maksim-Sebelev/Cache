@@ -18,38 +18,37 @@ struct OPT_cache
 {
     private:
         // struct typedef
-        using index_t      = ssize_t;
+        using index_t      = size_t;
         using request_t    = typename std::pair<key_t, item_t>;
         using IndexMapType = typename std::unordered_map<key_t, std::deque<index_t>>;
         using CacheMapType = typename std::unordered_map<key_t, item_t>;
         using input_vector = typename std::vector<request_t>;
 
         // class private constants
-        static constexpr key_t   POISON_KEY = static_cast<ssize_t>(0XEDAA);
-        static constexpr index_t INF_INDEX  = ~((index_t) 0); // index_t max value
+        static constexpr key_t   POISON_KEY = static_cast<size_t>(0XEDAA);
+        static constexpr index_t INF_INDEX  = UINT64_MAX; // index_t max value
 
         // class private variables
-        ssize_t      capacity_;
-        ssize_t      hits_counter_;
+        size_t      capacity_;
+        size_t      hits_counter_;
 
         IndexMapType map_future_;
         CacheMapType cache_map_;
 
 
     public:
-                    OPT_cache        ();
-                    OPT_cache        (ssize_t input_capacity);
-        ssize_t     run_cache        (const input_vector &key_items) ;
-        ssize_t     get_hit_count    ()                              ;
+               OPT_cache         (size_t input_capacity);
+        size_t run_cache         (const input_vector &key_items) ;
+        size_t get_hit_count     ()                              ;
 
     private:
         // struct private methods
 
-        bool        remove_farest     (const key_t &insert_key);
-        void        load_map_of_future(const input_vector &key_items);
+        bool   remove_farest     (const key_t &insert_key);
+        void   load_map_of_future(const input_vector &key_items);
 
         ON_DEBUG(
-        void        cache_map_dump    ();
+        void   cache_map_dump    ();
         )
 };
 
@@ -60,21 +59,14 @@ struct OPT_cache
 
 // ctor
 template <typename key_t, typename item_t>
-OPT_cache<key_t, item_t>::OPT_cache() :
-capacity_(0), hits_counter_(0)
-{}
-
-//---------------------------------------------------------------------------------------------------------------
-
-template <typename key_t, typename item_t>
-OPT_cache<key_t, item_t>::OPT_cache(ssize_t input_capacity) :
+OPT_cache<key_t, item_t>::OPT_cache(size_t input_capacity) :
 capacity_(input_capacity), hits_counter_(0)
 {}
 
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
-ssize_t
+size_t
 OPT_cache<key_t, item_t>::run_cache(const typename OPT_cache<key_t, item_t>::input_vector &key_items)
 {
     if (capacity_ <= 0LL) 
@@ -83,7 +75,7 @@ OPT_cache<key_t, item_t>::run_cache(const typename OPT_cache<key_t, item_t>::inp
     load_map_of_future(key_items);
 
     //todo: impl add_cache() and add to cache interface
-    for (ssize_t i = 0; i < key_items.size(); i++)
+    for (size_t i = 0; i < key_items.size(); i++)
     {
         const auto &[curr_key, curr_item] = key_items[i];
 
@@ -109,7 +101,7 @@ OPT_cache<key_t, item_t>::run_cache(const typename OPT_cache<key_t, item_t>::inp
 //---------------------------------------------------------------------------------------------------------------
 
 template <typename key_t, typename item_t>
-ssize_t
+size_t
 OPT_cache<key_t, item_t>::get_hit_count()
 {
     return hits_counter_;
@@ -166,6 +158,9 @@ OPT_cache<key_t, item_t>::load_map_of_future(const input_vector &key_items)
 //---------------------------------------------------------------------------------------------------------------
 
 ON_DEBUG(
+
+//---------------------------------------------------------------------------------------------------------------
+
 template <typename key_t, typename item_t>
 void
 OPT_cache<key_t, item_t>::cache_map_dump()
@@ -178,7 +173,10 @@ OPT_cache<key_t, item_t>::cache_map_dump()
         std::cout << "key: " << key_in_cache << " item: " << item_in_cache << std::endl;
     }
 }
-)
+
+//---------------------------------------------------------------------------------------------------------------
+
+) // ON_DEBUG
 
 //---------------------------------------------------------------------------------------------------------------
 
